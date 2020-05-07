@@ -1,24 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import TextSubmit from './teacher/LeadText';
+import MarkupText from './teacher/MarkupText';
 
 function App() {
+
+  const [text, setText] = useState("");
+
+  const onTextSubmit = (text: string) => {
+    setText(text);
+  }
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div >
+      <TextSubmit initialText="howdy!" submitFunc={onTextSubmit} />
+      <MarkupText text={text} />
     </div>
   );
 }
