@@ -13,7 +13,7 @@ const TextSubmit: FunctionComponent<TextSubmitProps> = ({ initialText, submitFun
 
     return <>
         <h2>Please enter or paste in the text</h2>
-        <textarea onChange={e => setText(e.target.value)}>{text}</textarea>
+        <textarea onChange={e => setText(e.target.value)} value={text}></textarea>
         <button onClick={() => submitFunc(text)}>Submit</button>
     </>
 
