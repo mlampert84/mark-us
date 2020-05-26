@@ -2,6 +2,22 @@ import React, { useState } from 'react';
 import './App.css';
 import TextSubmit from './teacher/LeadText';
 import MarkupText from './teacher/MarkupText';
+import { Selection, SelectionType } from './types/Selection';
+
+function addSelection(addition: Selection, existing: Selection[]) {
+  let insertIndex = 0;
+
+  for (let s of existing) {
+    if (addition.begin > s.begin) {
+      insertIndex++;
+    }
+    else {
+      break;
+    }
+  }
+
+  return [...existing.slice(0, insertIndex), addition, ...existing.slice(insertIndex, existing.length)];
+}
 
 function App() {
 
@@ -13,28 +29,24 @@ function App() {
     setText(text);
   }
 
+  const [selections, setSelections] = useState([] as Selection[]);
 
-
-  interface SelectionType {
-    name: string;
-    color: string;
-  };
+  const onSelection = (selection?: Selection) => {
+    if (selection !== undefined) {
+      setSelections(oldSelections => addSelection(selection, oldSelections));
+    }
+    console.log("Selections", selections);
+  }
 
   let selectionTypes: SelectionType[] = [{ name: "subjekt", color: "red" }, { name: "verb", color: "blue" }]
 
-  interface Selection {
-    type: SelectionType;
-    begin: Number;
-    end: Number;
-  }
 
-  let selections: Selection[];
 
 
   return (
     <div >
       <TextSubmit initialText={practiceText} submitFunc={onTextSubmit} />
-      <MarkupText text={text} />
+      <MarkupText text={text} selections={selections} onSelection={onSelection} />
     </div>
   );
 }
