@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { Selection, SelectionType } from '../types/Selection';
+import { Selection, SelectionType, selectionToCuts } from '../types/Selection';
 
 type props = {
     text: string;
@@ -13,40 +13,60 @@ const MarkUp: FunctionComponent<props> = ({ text, selections, onSelection }) => 
         console.log(window.getSelection());
 
         const range = window.getSelection()?.getRangeAt(0);
-        // window.getSelection()?.removeAllRanges();
+        window.getSelection()?.removeAllRanges();
         console.log("Range:", range);
         if (range !== undefined) {
+            if(range.startContainer?.parentElement?.id?.includes("start") &&
+                range.endContainer?.parentElement?.id?.includes("start")){
+
+            
             const selection: Selection = {
                 id: Math.random().toString(36).substring(2, 7),
                 type: { name: "subjekt", color: "green" },
-                begin: range.startOffset,
-                end: range.endOffset
+                begin: parseInt(range.startContainer.parentElement.id.split("-")[1]) + range.startOffset,
+                end: parseInt(range.endContainer.parentElement.id.split("-")[1]) + range.endOffset
             }
             onSelection(selection);
-
-            let displaySelections = [];
-
-            for (let s of selections) {
-                console.log("Redering a selection")
-                displaySelections.push(<p>{JSON.stringify(s)}hey</p>)
-            }
-
         }
+    }
     };
 
-    let displaySelections: any = text;
-    console.log(selections);
+    let cuts = selectionToCuts(selections);
+    console.log("Cuts:", cuts);
+    let displaySelections: any = [];
 
-    for (let s of selections) {
-        let beginText = text.slice(0, s.begin);
-        let spanText = text.slice(s.begin, s.end);
-        let endText = text.slice(s.end, text.length);
+    let firstSpanEnd = text.length;
+    let lastSpanStart = text.length;
 
-        displaySelections = [beginText, <span style={{ backgroundColor: s.type.color }} key={s.id}>{spanText}</span>, endText]
+    if(cuts.length > 0){
+        firstSpanEnd = cuts[0].index;
+        lastSpanStart = cuts[cuts.length-1].index;
     }
 
+    displaySelections.push(<span key="start" id="start-0">{text.slice(0,firstSpanEnd)}</span>);
+    let activeIds : string[] = [];
+
+    for(let i = 0; i <= cuts.length - 2; i++){
+
+        if(cuts[i].type === "start"){
+            activeIds.push(cuts[i].id);
+        }
+        if(cuts[i].type === "end"){
+            activeIds.splice(activeIds.indexOf(cuts[i].id), 1);
+        }
+
+        let classes = activeIds.join(" ");
+
+        displaySelections.push(<span key={cuts[i].id + cuts[i].type}className={classes} id={"start-"+cuts[i].index}>{text.slice(cuts[i].index,cuts[i+1].index)}</span>)
+
+    }
+
+    displaySelections.push(<span key="end" id={"start-"+lastSpanStart}>{text.slice(lastSpanStart,text.length)}</span>)
+    
+    
     return <>
         <p onMouseUp={showSelection} id="text-root">{displaySelections}</p>
+
         <p>dfsd<span>here</span>sdf<span>wsdfsdf</span>sd</p>
     </>
 }

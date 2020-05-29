@@ -4,21 +4,6 @@ import TextSubmit from './teacher/LeadText';
 import MarkupText from './teacher/MarkupText';
 import { Selection, SelectionType } from './types/Selection';
 
-function addSelection(addition: Selection, existing: Selection[]) {
-  let insertIndex = 0;
-
-  for (let s of existing) {
-    if (addition.begin > s.begin) {
-      insertIndex++;
-    }
-    else {
-      break;
-    }
-  }
-
-  return [...existing.slice(0, insertIndex), addition, ...existing.slice(insertIndex, existing.length)];
-}
-
 function App() {
 
   let practiceText = "The quick brown fox jumped over the fence. The little dog laughed.  I went to the store."
@@ -33,7 +18,7 @@ function App() {
 
   const onSelection = (selection?: Selection) => {
     if (selection !== undefined) {
-      setSelections(oldSelections => addSelection(selection, oldSelections));
+      setSelections((oldSelections : Selection[]) => [...oldSelections,selection]);
     }
     console.log("Selections", selections);
   }
