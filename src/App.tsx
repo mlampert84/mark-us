@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import TextSubmit from './teacher/LeadText';
 import MarkupText from './teacher/MarkupText';
-import { Selection, SelectionType } from './types/Selection';
+import { Selection } from './types/Selection';
 
 function App() {
 
@@ -18,14 +18,10 @@ function App() {
 
   const onSelection = (selection?: Selection) => {
     if (selection !== undefined) {
-      setSelections((oldSelections : Selection[]) => [...oldSelections,selection]);
+      setSelections((oldSelections: Selection[]) => [...oldSelections, selection]);
     }
     console.log("Selections", selections);
   }
-
-  let selectionTypes: SelectionType[] = [{ name: "subjekt", color: "red" }, { name: "verb", color: "blue" }]
-
-
 
 
   return (

@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
-import { Selection, SelectionType, selectionToCuts } from "../types/Selection";
-
+import { Selection, selectionToCuts } from "../types/Selection";
+import { Category, cssBackgroundColor, grammarCategories } from "../types/MarkupCategory"
 type props = {
   text: string;
   selections: Selection[];
@@ -20,7 +20,7 @@ function makeSelection(): null | Selection {
     ) {
       const selection: Selection = {
         id: Math.random().toString(36).substring(2, 7),
-        type: { name: "subjekt", color: "green" },
+        category: "Subjekt",
         begin:
           parseInt(range.startContainer.parentElement.id.split("-")[1]) +
           range.startOffset,
@@ -63,13 +63,17 @@ const MarkUp: FunctionComponent<props> = ({ text, selections, onSelection }) => 
     </span>
   );
   let activeIds: string[] = [];
+  let activeCategories: Category[] = [];
 
   for (let i = 0; i <= cuts.length - 2; i++) {
     if (cuts[i].type === "start") {
       activeIds.push(cuts[i].id);
+      activeCategories.push(cuts[i].category)
     }
     if (cuts[i].type === "end") {
       activeIds.splice(activeIds.indexOf(cuts[i].id), 1);
+      activeCategories.splice(activeCategories.indexOf(cuts[i].category), 1);
+
     }
 
     let classes = activeIds.join(" ");
@@ -79,6 +83,8 @@ const MarkUp: FunctionComponent<props> = ({ text, selections, onSelection }) => 
         key={cuts[i].id + cuts[i].type}
         className={classes}
         id={"start-" + cuts[i].index}
+        style={{ backgroundColor: cssBackgroundColor(grammarCategories, activeCategories[0]) }}
+
       >
         {text.slice(cuts[i].index, cuts[i + 1].index)}
       </span>

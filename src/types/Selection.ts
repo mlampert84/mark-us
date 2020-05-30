@@ -1,10 +1,7 @@
-export interface SelectionType {
-    name: string;
-    color: string;
-};
+import { Category } from "./MarkupCategory"
 
 export interface Selection {
-    type: SelectionType;
+    category: Category;
     id: string;
     begin: number;
     end: number;
@@ -12,30 +9,32 @@ export interface Selection {
 
 
 
-
-export interface Cut{
+export interface Cut {
+    category: Category;
     id: string;
     type: "start" | "end";
-    index: number;   
+    index: number;
 }
 
 
-export function selectionToCuts(selections : Selection[]) : Cut[] {
-    let cuts : Cut[] = [];
+export function selectionToCuts(selections: Selection[]): Cut[] {
+    let cuts: Cut[] = [];
 
 
-    for(let s of selections){
+    for (let s of selections) {
         const startCut: Cut = {
+            category: s.category,
             id: s.id,
             type: "start",
             index: s.begin
         }
-        
-        const endCut : Cut = {
+
+        const endCut: Cut = {
+            category: s.category,
             id: s.id,
             type: "end",
             index: s.end
-            
+
         }
 
         cuts.push(startCut, endCut);
@@ -44,28 +43,28 @@ export function selectionToCuts(selections : Selection[]) : Cut[] {
     }
 
     cuts.sort(cutComparator);
-    
+
     return cuts;
 
 }
 
-function cutComparator(a: Cut, b: Cut): -1| 0 | 1{
-    if(a.index < b.index){
+function cutComparator(a: Cut, b: Cut): -1 | 0 | 1 {
+    if (a.index < b.index) {
         return -1;
     }
 
-    else if(a.index > b.index){
+    else if (a.index > b.index) {
         return 1;
     }
 
-    else{
-        if(a.type === "start" && b.type === "end"){
-        return -1;
+    else {
+        if (a.type === "start" && b.type === "end") {
+            return -1;
         }
-        else if(a.type === "end" && b.type === "start"){
+        else if (a.type === "end" && b.type === "start") {
             return 1;
         }
-        else{
+        else {
             return 0;
         }
     }
