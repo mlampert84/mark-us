@@ -1,74 +1,103 @@
-import React, { FunctionComponent } from 'react';
-import { Selection, SelectionType, selectionToCuts } from '../types/Selection';
+import React, { FunctionComponent } from "react";
+import { Selection, SelectionType, selectionToCuts } from "../types/Selection";
 
 type props = {
-    text: string;
-    selections: Selection[];
-    onSelection: (selection?: Selection) => void;
+  text: string;
+  selections: Selection[];
+  onSelection: (selection?: Selection) => void;
+};
+
+function makeSelection(): null | Selection {
+  console.log(window.getSelection());
+
+  const range = window.getSelection()?.getRangeAt(0);
+  window.getSelection()?.removeAllRanges();
+  console.log("Range:", range);
+  if (range !== undefined) {
+    if (
+      range.startContainer?.parentElement?.id?.includes("start") &&
+      range.endContainer?.parentElement?.id?.includes("start")
+    ) {
+      const selection: Selection = {
+        id: Math.random().toString(36).substring(2, 7),
+        type: { name: "subjekt", color: "green" },
+        begin:
+          parseInt(range.startContainer.parentElement.id.split("-")[1]) +
+          range.startOffset,
+        end:
+          parseInt(range.endContainer.parentElement.id.split("-")[1]) +
+          range.endOffset,
+      };
+      return selection;
+    }
+    return null;
+  }
+
+  return null;
 }
 
 const MarkUp: FunctionComponent<props> = ({ text, selections, onSelection }) => {
-
-    let showSelection = () => {
-        console.log(window.getSelection());
-
-        const range = window.getSelection()?.getRangeAt(0);
-        window.getSelection()?.removeAllRanges();
-        console.log("Range:", range);
-        if (range !== undefined) {
-            if(range.startContainer?.parentElement?.id?.includes("start") &&
-                range.endContainer?.parentElement?.id?.includes("start")){
-
-            
-            const selection: Selection = {
-                id: Math.random().toString(36).substring(2, 7),
-                type: { name: "subjekt", color: "green" },
-                begin: parseInt(range.startContainer.parentElement.id.split("-")[1]) + range.startOffset,
-                end: parseInt(range.endContainer.parentElement.id.split("-")[1]) + range.endOffset
-            }
-            onSelection(selection);
-        }
-    }
-    };
-
-    let cuts = selectionToCuts(selections);
-    console.log("Cuts:", cuts);
-    let displaySelections: any = [];
-
-    let firstSpanEnd = text.length;
-    let lastSpanStart = text.length;
-
-    if(cuts.length > 0){
-        firstSpanEnd = cuts[0].index;
-        lastSpanStart = cuts[cuts.length-1].index;
+  let checkSelection = () => {
+    let selection = makeSelection();
+    if (selection !== null) {
+      onSelection(selection)
     }
 
-    displaySelections.push(<span key="start" id="start-0">{text.slice(0,firstSpanEnd)}</span>);
-    let activeIds : string[] = [];
+  };
 
-    for(let i = 0; i <= cuts.length - 2; i++){
+  let cuts = selectionToCuts(selections);
+  console.log("Cuts:", cuts);
+  let displaySelections: any = [];
 
-        if(cuts[i].type === "start"){
-            activeIds.push(cuts[i].id);
-        }
-        if(cuts[i].type === "end"){
-            activeIds.splice(activeIds.indexOf(cuts[i].id), 1);
-        }
+  let firstSpanEnd = text.length;
+  let lastSpanStart = text.length;
 
-        let classes = activeIds.join(" ");
+  if (cuts.length > 0) {
+    firstSpanEnd = cuts[0].index;
+    lastSpanStart = cuts[cuts.length - 1].index;
+  }
 
-        displaySelections.push(<span key={cuts[i].id + cuts[i].type}className={classes} id={"start-"+cuts[i].index}>{text.slice(cuts[i].index,cuts[i+1].index)}</span>)
+  displaySelections.push(
+    <span key="start" id="start-0">
+      {text.slice(0, firstSpanEnd)}
+    </span>
+  );
+  let activeIds: string[] = [];
 
+  for (let i = 0; i <= cuts.length - 2; i++) {
+    if (cuts[i].type === "start") {
+      activeIds.push(cuts[i].id);
+    }
+    if (cuts[i].type === "end") {
+      activeIds.splice(activeIds.indexOf(cuts[i].id), 1);
     }
 
-    displaySelections.push(<span key="end" id={"start-"+lastSpanStart}>{text.slice(lastSpanStart,text.length)}</span>)
-    
-    
-    return <>
-        <p onMouseUp={showSelection} id="text-root">{displaySelections}</p>
+    let classes = activeIds.join(" ");
 
-        <p>dfsd<span>here</span>sdf<span>wsdfsdf</span>sd</p>
+    displaySelections.push(
+      <span
+        key={cuts[i].id + cuts[i].type}
+        className={classes}
+        id={"start-" + cuts[i].index}
+      >
+        {text.slice(cuts[i].index, cuts[i + 1].index)}
+      </span>
+    );
+  }
+
+  displaySelections.push(
+    <span key="end" id={"start-" + lastSpanStart}>
+      {text.slice(lastSpanStart, text.length)}
+    </span>
+  );
+
+  return (
+    <>
+      <p onMouseUp={checkSelection} id="text-root">
+        {displaySelections}
+      </p>
     </>
-}
+  );
+};
 
 export default MarkUp;
