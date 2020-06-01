@@ -1,13 +1,15 @@
 import React, { FunctionComponent } from "react";
 import { Selection, selectionToCuts } from "../types/Selection";
-import { Category, cssBackgroundColor, grammarCategories } from "../types/MarkupCategory"
+import { Category, mapCategoryToColor } from "../types/MarkupCategory"
+
 type props = {
   text: string;
   selections: Selection[];
   onSelection: (selection?: Selection) => void;
+  category: Category
 };
 
-function makeSelection(): null | Selection {
+function makeSelection(category: Category, text: string): null | Selection {
   console.log(window.getSelection());
 
   const range = window.getSelection()?.getRangeAt(0);
@@ -20,7 +22,7 @@ function makeSelection(): null | Selection {
     ) {
       const selection: Selection = {
         id: Math.random().toString(36).substring(2, 7),
-        category: "Subjekt",
+        category: category,
         begin:
           parseInt(range.startContainer.parentElement.id.split("-")[1]) +
           range.startOffset,
@@ -36,9 +38,9 @@ function makeSelection(): null | Selection {
   return null;
 }
 
-const MarkUp: FunctionComponent<props> = ({ text, selections, onSelection }) => {
+const MarkUp: FunctionComponent<props> = ({ text, selections, onSelection, category }) => {
   let checkSelection = () => {
-    let selection = makeSelection();
+    let selection = makeSelection(category, text);
     if (selection !== null) {
       onSelection(selection)
     }
@@ -83,7 +85,7 @@ const MarkUp: FunctionComponent<props> = ({ text, selections, onSelection }) => 
         key={cuts[i].id + cuts[i].type}
         className={classes}
         id={"start-" + cuts[i].index}
-        style={{ backgroundColor: cssBackgroundColor(grammarCategories, activeCategories[0]) }}
+        style={{ backgroundColor: mapCategoryToColor(activeCategories[0]) }}
 
       >
         {text.slice(cuts[i].index, cuts[i + 1].index)}
