@@ -14,7 +14,7 @@ const CategoryMenu: FunctionComponent<props> = ({ category, onCategorySelect }) 
     for (let i = 0; i < grammarCategories.length; i++) {
         buttons.push(
             <button style={{ backgroundColor: grammarCategories[i].color }}
-                onClick={(event) => onCategorySelect(grammarCategories[i].category)}
+                onClick={() => onCategorySelect(grammarCategories[i].category)}
             >{grammarCategories[i].category}</button>)
     }
     return <>{buttons}</>

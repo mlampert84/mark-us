@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { Selection, selectionToCuts } from "../types/Selection";
+import { Selection, selectionToCuts, fitToWord } from "../types/Selection";
 import { Category, mapCategoryToColor } from "../types/MarkupCategory"
 
 type props = {
@@ -20,15 +20,21 @@ function makeSelection(category: Category, text: string): null | Selection {
       range.startContainer?.parentElement?.id?.includes("start") &&
       range.endContainer?.parentElement?.id?.includes("start")
     ) {
+
+      const begin = parseInt(range.startContainer.parentElement.id.split("-")[1]) + range.startOffset;
+      const end = parseInt(range.endContainer.parentElement.id.split("-")[1]) + range.endOffset;
+
+      const editedRange: [number, number] | null = fitToWord(text, begin, end);
+
+      if (editedRange === null) {
+        return null;
+      }
+
       const selection: Selection = {
         id: Math.random().toString(36).substring(2, 7),
         category: category,
-        begin:
-          parseInt(range.startContainer.parentElement.id.split("-")[1]) +
-          range.startOffset,
-        end:
-          parseInt(range.endContainer.parentElement.id.split("-")[1]) +
-          range.endOffset,
+        begin: editedRange[0],
+        end: editedRange[1]
       };
       return selection;
     }
