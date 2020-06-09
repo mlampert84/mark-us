@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import './App.css';
 import TextSubmit from './teacher/LeadText';
 import MarkupText from './teacher/MarkupText';
+import { emptyClause, Clause, ClausePart, SelectionType } from './types/Clause';
 import { Selection } from './types/Selection';
-import { Category, grammarCategories, CategoryColor } from './types/MarkupCategory';
-import CategoryMenu from './teacher/CategoryMenu';
+import Clauses from './teacher/Clauses';
 
 function App() {
 
@@ -16,29 +16,45 @@ function App() {
     setText(text);
   }
 
-  const [selections, setSelections] = useState([] as Selection[]);
+
+
+  const [clauses, setClauses] = useState([emptyClause()]);
+
+  const [selectionType, setSelectionType] = useState<SelectionType | undefined>(
+    {
+      clause: 0,
+      part: "mainVerb"
+    }
+  );
+
+  const onSelectionTypeSelect = (type: SelectionType) => {
+    setSelectionType(type);
+  }
+
 
   const onSelection = (selection?: Selection) => {
-    if (selection !== undefined) {
-      setSelections((oldSelections: Selection[]) => [...oldSelections, selection]);
+    if (selection !== undefined && selectionType !== undefined) {
+
+      console.log("SelectionType being updated:", selectionType.part);
+      setClauses((oldClauses: Clause[]) => {
+        let newClauses = [...oldClauses];
+        newClauses[selectionType.clause][selectionType.part] = selection;
+        return newClauses;
+      })
     }
-    console.log("Selections", selections);
+    console.log("Clauses", clauses);
   }
 
-
-  const [category, setCategory] = useState("Subjekt");
-
-  const onCategorySelect = (category: Category) => {
-    setCategory(category);
-  }
+  //This is just a type placeholder.  Remove one you can convert clauses to an array of selections.
+  let selections: Selection[] = [];
 
   return (
     <div >
       <TextSubmit initialText={practiceText} submitFunc={onTextSubmit} />
       <MarkupText text={text}
         selections={selections} onSelection={onSelection}
-        category={category} />
-      <CategoryMenu category={category} onCategorySelect={onCategorySelect} />
+        clauses={clauses} />
+      <Clauses text={text} clauses={clauses} onSelectionTypeSelect={onSelectionTypeSelect} />
 
     </div>
   );

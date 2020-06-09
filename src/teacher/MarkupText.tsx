@@ -1,15 +1,16 @@
 import React, { FunctionComponent } from "react";
 import { Selection, selectionToCuts, fitToWord } from "../types/Selection";
-import { Category, mapCategoryToColor } from "../types/MarkupCategory"
+import { Category } from "../types/MarkupCategory"
+import { Clause } from "../types/Clause";
 
 type props = {
   text: string;
+  clauses: Clause[];
   selections: Selection[];
   onSelection: (selection?: Selection) => void;
-  category: Category
 };
 
-function makeSelection(category: Category, text: string): null | Selection {
+function makeSelection(text: string): null | Selection {
   console.log(window.getSelection());
 
   const range = window.getSelection()?.getRangeAt(0);
@@ -32,7 +33,6 @@ function makeSelection(category: Category, text: string): null | Selection {
 
       const selection: Selection = {
         id: Math.random().toString(36).substring(2, 7),
-        category: category,
         begin: editedRange[0],
         end: editedRange[1]
       };
@@ -44,9 +44,9 @@ function makeSelection(category: Category, text: string): null | Selection {
   return null;
 }
 
-const MarkUp: FunctionComponent<props> = ({ text, selections, onSelection, category }) => {
+const MarkUp: FunctionComponent<props> = ({ text, selections, onSelection }) => {
   let checkSelection = () => {
-    let selection = makeSelection(category, text);
+    let selection = makeSelection(text);
     if (selection !== null) {
       onSelection(selection)
     }
@@ -71,17 +71,13 @@ const MarkUp: FunctionComponent<props> = ({ text, selections, onSelection, categ
     </span>
   );
   let activeIds: string[] = [];
-  let activeCategories: Category[] = [];
 
   for (let i = 0; i <= cuts.length - 2; i++) {
     if (cuts[i].type === "start") {
       activeIds.push(cuts[i].id);
-      activeCategories.push(cuts[i].category)
     }
     if (cuts[i].type === "end") {
       activeIds.splice(activeIds.indexOf(cuts[i].id), 1);
-      activeCategories.splice(activeCategories.indexOf(cuts[i].category), 1);
-
     }
 
     let classes = activeIds.join(" ");
@@ -91,7 +87,6 @@ const MarkUp: FunctionComponent<props> = ({ text, selections, onSelection, categ
         key={cuts[i].id + cuts[i].type}
         className={classes}
         id={"start-" + cuts[i].index}
-        style={{ backgroundColor: mapCategoryToColor(activeCategories[0]) }}
 
       >
         {text.slice(cuts[i].index, cuts[i + 1].index)}
