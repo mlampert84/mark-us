@@ -6,7 +6,6 @@ import { Clause } from "../types/Clause";
 type props = {
   text: string;
   clauses: Clause[];
-  selections: Selection[];
   onSelection: (selection?: Selection) => void;
 };
 
@@ -44,7 +43,7 @@ function makeSelection(text: string): null | Selection {
   return null;
 }
 
-const MarkUp: FunctionComponent<props> = ({ text, selections, onSelection }) => {
+const MarkUp: FunctionComponent<props> = ({ text, clauses, onSelection }) => {
   let checkSelection = () => {
     let selection = makeSelection(text);
     if (selection !== null) {
@@ -53,6 +52,8 @@ const MarkUp: FunctionComponent<props> = ({ text, selections, onSelection }) => 
 
   };
 
+  //TODO: implement clausesToSelectionsFunction
+  let selections = clausesToSelections(clauses);
   let cuts = selectionToCuts(selections);
   console.log("Cuts:", cuts);
   let displaySelections: any = [];

@@ -52,7 +52,7 @@ function App() {
     <div >
       <TextSubmit initialText={practiceText} submitFunc={onTextSubmit} />
       <MarkupText text={text}
-        selections={selections} onSelection={onSelection}
+        onSelection={onSelection}
         clauses={clauses} />
       <Clauses text={text} clauses={clauses} onSelectionTypeSelect={onSelectionTypeSelect} />
 
