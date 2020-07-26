@@ -1,27 +1,36 @@
 import { Maybe, Nothing } from "../util/Maybe";
 import { Selection } from "./Selection";
+import Clauses from "../teacher/Clauses";
 // import { Category } from "./MarkupCategory";
 
 
 
-export type ClausePart = "mainVerb" | "verbPart" | "subject" | "accusative" | "dative" | "genitive";
-
+// let clauseParts : string[] = ["mainVerb" , "verbPart" , "subject", "accusative" , "dative" , "genitive"];
 
 export type Clause = {
     [key in ClausePart]: Maybe<Selection>;
 }
 
 
+// export class Clause {
+//     [key: string]: Maybe<Selection>;
+//     "mainVerb": Maybe<Selection>;
+//     "verbPart": Maybe<Selection>;
+//     "subject": Maybe<Selection>;
+//     "accusative": Maybe<Selection>;
+//     "dative": Maybe<Selection>;
+//     "genitive": Maybe<Selection>;
+// }
+
 export function emptyClause(): Clause {
 
-    return {
-        mainVerb: Nothing,
-        verbPart: Nothing,
-        subject: Nothing,
-        accusative: Nothing,
-        dative: Nothing,
-        genitive: Nothing
-    }
+    const clause = new Clause();
+
+    Object.keys(clause).forEach((key: string) => {
+        clause[key] = Nothing;
+    });
+
+    return clause;
 }
 
 export function clauseIsEmpty(clause: Clause): boolean {
@@ -57,6 +66,7 @@ export const display: ClausePartDisplay =
 
 export function mapGrammarPartToColor(part: ClausePart): string {
 
-    return display[part][0];
+    return display[part][1];
 }
 
+// id: Math.random().toString(36).substring(2, 7),
