@@ -1,36 +1,25 @@
 import { Maybe, Nothing } from "../util/Maybe";
 import { Selection } from "./Selection";
-import Clauses from "../teacher/Clauses";
-// import { Category } from "./MarkupCategory";
 
+export type ClausePart = "mainVerb" | "verbPart" | "subject" | "accusative" | "dative" | "genitive";
 
-
-// let clauseParts : string[] = ["mainVerb" , "verbPart" , "subject", "accusative" , "dative" , "genitive"];
 
 export type Clause = {
     [key in ClausePart]: Maybe<Selection>;
 }
 
 
-// export class Clause {
-//     [key: string]: Maybe<Selection>;
-//     "mainVerb": Maybe<Selection>;
-//     "verbPart": Maybe<Selection>;
-//     "subject": Maybe<Selection>;
-//     "accusative": Maybe<Selection>;
-//     "dative": Maybe<Selection>;
-//     "genitive": Maybe<Selection>;
-// }
-
 export function emptyClause(): Clause {
 
-    const clause = new Clause();
+    return {
+        mainVerb: Nothing,
+        verbPart: Nothing,
+        subject: Nothing,
+        accusative: Nothing,
+        dative: Nothing,
+        genitive: Nothing
+    }
 
-    Object.keys(clause).forEach((key: string) => {
-        clause[key] = Nothing;
-    });
-
-    return clause;
 }
 
 export function clauseIsEmpty(clause: Clause): boolean {
@@ -44,7 +33,7 @@ export function clauseIsEmpty(clause: Clause): boolean {
 }
 
 export interface SelectionType {
-    clause: number,
+    clauseId: string,
     part: ClausePart
 }
 
@@ -69,4 +58,65 @@ export function mapGrammarPartToColor(part: ClausePart): string {
     return display[part][1];
 }
 
-// id: Math.random().toString(36).substring(2, 7),
+
+function genId(): string {
+    return Math.random().toString(36).substring(2, 7);
+};
+export function initializeClauses(): Map<string, Clause> {
+
+    let map = new Map();
+
+    map.set(genId(), emptyClause());
+
+    return map;
+
+}
+
+
+function hasEmptyClause(map: Map<string, Clause>): boolean {
+    map.forEach((value) => {
+        if (clauseIsEmpty(value)) {
+            return true;
+        }
+    });
+    return false;
+}
+
+export function getFirstId(map: Map<string, Clause>): string {
+    // console.log("HEEEEELLLLOO");
+    let keys = Array.from(map.keys());
+    // console.log("Keys: ", keys);
+
+    for (let k of keys) {
+        // console.log("Returning first id: ", k);
+        return k;
+    }
+
+    return "";
+}
+
+export function updateClause(map: Map<string, Clause>, st: SelectionType, selection: Selection): Map<string, Clause> {
+
+    let newMap: Map<string, Clause> = cloneMap(map);
+
+    // console.log("updating cluase with id " + st.clauseId)
+    let clause = newMap.get(st.clauseId);
+    if (clause !== undefined) {
+        clause[st.part] = selection;
+    } else {
+        console.log("Could not update clause.  Id not found.");
+    }
+    return newMap;
+}
+
+function cloneMap(map: Map<string, Clause>): Map<string, Clause> {
+
+    let newMap: Map<string, Clause> = new Map();
+
+    map.forEach((value, key) => {
+
+        newMap.set(key, value);
+    });
+
+    return newMap;
+}

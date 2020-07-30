@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import './App.css';
 import TextSubmit from './teacher/LeadText';
 import MarkupText from './teacher/MarkupText';
-import { emptyClause, Clause, ClausePart, SelectionType } from './types/Clause';
+import { initializeClauses, SelectionType, getFirstId, updateClause } from './types/Clause';
 import { Selection } from './types/Selection';
 import Clauses from './teacher/Clauses';
+// import { Cut, clausesToCuts } from './types/Cuts';
 
 function App() {
 
@@ -17,12 +18,13 @@ function App() {
   }
 
 
+  const [clauses, setClauses] = useState(initializeClauses);
 
-  const [clauses, setClauses] = useState([emptyClause()]);
-
+  const initialSelection = getFirstId(clauses);
+  console.log("InitialSelection", initialSelection);
   const [selectionType, setSelectionType] = useState<SelectionType | undefined>(
     {
-      clause: 0,
+      clauseId: getFirstId(clauses),
       part: "mainVerb"
     }
   );
@@ -33,17 +35,16 @@ function App() {
 
 
   const onSelection = (selection?: Selection) => {
+    // console.log("Here is the selectionType: ", selectionType)
     if (selection !== undefined && selectionType !== undefined) {
 
-      console.log("SelectionType being updated:", selectionType.part);
-      setClauses((oldClauses: Clause[]) => {
-        let newClauses = [...oldClauses];
-        newClauses[selectionType.clause][selectionType.part] = selection;
-        return newClauses;
-      })
+      console.log("Updating clauses...");
+      setClauses(updateClause(clauses, selectionType, selection));
+      // setText("Hello there");
     }
     console.log("Clauses", clauses);
   }
+
 
   //This is just a type placeholder.  Remove one you can convert clauses to an array of selections.
   let selections: Selection[] = [];

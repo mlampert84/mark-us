@@ -1,11 +1,11 @@
 import React, { FunctionComponent } from "react";
-import { Selection, selectionToCuts, fitToWord } from "../types/Selection";
-import { Category } from "../types/MarkupCategory"
+import { Selection, fitToWord } from "../types/Selection";
 import { Clause } from "../types/Clause";
+import { clausesToCuts } from "../types/Cuts";
 
 type props = {
   text: string;
-  clauses: Clause[];
+  clauses: Map<string, Clause>;
   onSelection: (selection?: Selection) => void;
 };
 
@@ -31,9 +31,9 @@ function makeSelection(text: string): null | Selection {
       }
 
       const selection: Selection = {
-        id: Math.random().toString(36).substring(2, 7),
         begin: editedRange[0],
         end: editedRange[1]
+
       };
       return selection;
     }
@@ -44,6 +44,8 @@ function makeSelection(text: string): null | Selection {
 }
 
 const MarkUp: FunctionComponent<props> = ({ text, clauses, onSelection }) => {
+
+  console.log("Rerendering markup.");
   let checkSelection = () => {
     let selection = makeSelection(text);
     if (selection !== null) {
@@ -53,9 +55,8 @@ const MarkUp: FunctionComponent<props> = ({ text, clauses, onSelection }) => {
   };
 
   //TODO: implement clausesToSelectionsFunction
-  let selections = clausesToSelections(clauses);
-  let cuts = selectionToCuts(selections);
-  console.log("Cuts:", cuts);
+  let cuts = clausesToCuts(clauses);
+  console.log("Cuts from markup:", cuts);
   let displaySelections: any = [];
 
   let firstSpanEnd = text.length;
@@ -67,15 +68,19 @@ const MarkUp: FunctionComponent<props> = ({ text, clauses, onSelection }) => {
   }
 
   displaySelections.push(
-    <span key="start" id="start-0">
+    <span
+      key="start"
+      id="start-0">
       {text.slice(0, firstSpanEnd)}
     </span>
   );
   let activeIds: string[] = [];
 
   for (let i = 0; i <= cuts.length - 2; i++) {
+    let style;
     if (cuts[i].type === "start") {
       activeIds.push(cuts[i].id);
+      style = { backgroundColor: cuts[i].color }
     }
     if (cuts[i].type === "end") {
       activeIds.splice(activeIds.indexOf(cuts[i].id), 1);
@@ -85,10 +90,11 @@ const MarkUp: FunctionComponent<props> = ({ text, clauses, onSelection }) => {
 
     displaySelections.push(
       <span
-        key={cuts[i].id + cuts[i].type}
+        key={cuts[i].id + cuts[i].type + cuts[i].color}
         className={classes}
         id={"start-" + cuts[i].index}
-
+        //Figure out how to handle color of overlapping selections.
+        style={style}
       >
         {text.slice(cuts[i].index, cuts[i + 1].index)}
       </span>

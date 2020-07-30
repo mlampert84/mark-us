@@ -1,25 +1,24 @@
 import React, { FunctionComponent, ReactNode } from "react";
-import { Clause, emptyClause, ClausePart, SelectionType } from "../types/Clause";
+import { Clause, ClausePart, SelectionType } from "../types/Clause";
 import { Maybe, Nothing } from "../util/Maybe";
 import { Selection } from "../types/Selection";
 
 
 type props = {
     text: string,
-    clauses: Clause[];
+    clauses: Map<string, Clause>;
     onSelectionTypeSelect: (type: SelectionType) => void;
 
 }
 
-
 function renderClausePart(text: string,
-    clauseIndex: number,
+    clauseIndex: string,
     clausePart: ClausePart, selection: Maybe<Selection>,
     onSelectionTypeSelect: (s: SelectionType) => void): ReactNode {
 
     let view: ReactNode;
 
-    let onClick = () => { onSelectionTypeSelect({ clause: clauseIndex, part: clausePart }) }
+    let onClick = () => { onSelectionTypeSelect({ clauseId: clauseIndex, part: clausePart }) }
 
     if (selection === Nothing) {
         view = <button onClick={onClick}>Select</button>
@@ -27,15 +26,15 @@ function renderClausePart(text: string,
     }
 
     else {
-        view = text.substr(selection.begin, selection.end);
+        view = text.substr(selection.begin, selection.end - selection.begin);
     }
-    return <span>{clausePart}
+    return <span key={clauseIndex + clausePart}>{clausePart}
         {view}
     </span>;
 }
 
 function renderClause(text: string,
-    clauseIndex: number,
+    clauseIndex: string,
     clause: Clause,
     onSelectionTypeSelect: (s: SelectionType) => void): ReactNode {
 
@@ -46,7 +45,7 @@ function renderClause(text: string,
 
     }
 
-    return <div>{view}</div>;
+    return <div key={clauseIndex}>{view}</div>;
 
 }
 
