@@ -6,13 +6,15 @@ import MarkupText from './teacher/MarkupText';
 import { initializeClauses, SelectionType, getFirstId, updateClause } from './types/Clause';
 import { Selection } from './types/Selection';
 import Clauses from './teacher/Clauses';
-// import { Cut, clausesToCuts } from './types/Cuts';
+import sentences from './teacher/SentenceExamples';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
 
-  let practiceText = "The quick brown fox jumped over the fence. The little dog laughed.  I went to the store."
+  let exampleText = sentences[Math.floor(Math.random() * sentences.length)]
 
-  const [text, setText] = useState(practiceText);
+  const [text, setText] = useState(exampleText);
 
   const onTextSubmit = (text: string) => {
     setText(text);
@@ -53,7 +55,7 @@ function App() {
   return (
     <Container >
       <Row><h2>Der Satzanalyzator</h2></Row>
-      <TextSubmit initialText={practiceText} submitFunc={onTextSubmit} />
+      <TextSubmit initialText={text} submitFunc={onTextSubmit} />
       <MarkupText text={text}
         onSelection={onSelection}
         clauses={clauses} />

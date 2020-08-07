@@ -1,4 +1,5 @@
 import React, { FunctionComponent, useState } from 'react';
+import { Accordion, Card, Button } from 'react-bootstrap';
 
 type TextSubmitProps = {
     initialText: string,
@@ -10,12 +11,19 @@ const TextSubmit: FunctionComponent<TextSubmitProps> = ({ initialText, submitFun
 
     const [text, setText] = useState(initialText);
 
-
-    return <>
-        <h2>Please enter or paste in the text</h2>
-        <textarea onChange={e => setText(e.target.value)} value={text}></textarea>
-        <button onClick={() => submitFunc(text)}>Submit</button>
-    </>
+    return <Accordion>
+        <Card>
+            <Accordion.Toggle as={Card.Header} eventKey="0">
+                <p>Enter new sentence.</p>
+            </Accordion.Toggle>
+            <Accordion.Collapse eventKey="0">
+                <Card.Body>
+                    <textarea onChange={e => setText(e.target.value)} value={text}></textarea>
+                    <button onClick={() => submitFunc(text)}>Submit</button>
+                </Card.Body>
+            </Accordion.Collapse>
+        </Card>
+    </Accordion>
 
 }
 
