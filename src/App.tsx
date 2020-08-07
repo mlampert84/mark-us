@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Container, Row } from 'react-bootstrap';
 import './App.css';
 import TextSubmit from './teacher/LeadText';
 import MarkupText from './teacher/MarkupText';
@@ -50,14 +51,15 @@ function App() {
   let selections: Selection[] = [];
 
   return (
-    <div >
+    <Container >
+      <Row><h2>Der Satzanalyzator</h2></Row>
       <TextSubmit initialText={practiceText} submitFunc={onTextSubmit} />
       <MarkupText text={text}
         onSelection={onSelection}
         clauses={clauses} />
       <Clauses text={text} clauses={clauses} onSelectionTypeSelect={onSelectionTypeSelect} />
 
-    </div>
+    </Container>
   );
 }
 

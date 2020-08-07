@@ -26,7 +26,10 @@ function renderClausePart(text: string,
     }
 
     else {
-        view = text.substr(selection.begin, selection.end - selection.begin);
+        view = <div>
+            <span>{text.substr(selection.begin, selection.end - selection.begin)}</span>
+            <button onClick={onClick}>Reselect</button>
+        </div>;
     }
     return <span key={clauseIndex + clausePart}>{clausePart}
         {view}
