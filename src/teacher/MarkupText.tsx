@@ -2,6 +2,8 @@ import React, { FunctionComponent } from "react";
 import { Selection, fitToWord } from "../types/Selection";
 import { Clause } from "../types/Clause";
 import { clausesToCuts } from "../types/Cuts";
+import { Jumbotron } from 'react-bootstrap';
+
 
 type props = {
   text: string;
@@ -109,9 +111,11 @@ const MarkUp: FunctionComponent<props> = ({ text, clauses, onSelection }) => {
 
   return (
     <>
-      <p onMouseUp={checkSelection} id="text-root">
-        {displaySelections}
-      </p>
+      <Jumbotron>
+        <p onMouseUp={checkSelection} id="text-root">
+          {displaySelections}
+        </p>
+      </Jumbotron>
     </>
   );
 };

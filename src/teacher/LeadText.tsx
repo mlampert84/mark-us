@@ -1,5 +1,5 @@
-import React, { FunctionComponent, useState } from 'react';
-import { Accordion, Card, Button } from 'react-bootstrap';
+import React, { FunctionComponent, useState, useRef } from 'react';
+import { Accordion, Card, Button, ButtonGroup, Form, useAccordionToggle, Collapse, ButtonToolbar } from 'react-bootstrap';
 
 type TextSubmitProps = {
     initialText: string,
@@ -11,19 +11,36 @@ const TextSubmit: FunctionComponent<TextSubmitProps> = ({ initialText, submitFun
 
     const [text, setText] = useState(initialText);
 
-    return <Accordion>
-        <Card>
-            <Accordion.Toggle as={Card.Header} eventKey="0">
-                <p>Enter new sentence.</p>
-            </Accordion.Toggle>
-            <Accordion.Collapse eventKey="0">
+    const [open, setOpen] = useState(false);
+
+    const submitAndClose = (text: string) => {
+        submitFunc(text);
+        setOpen(false);
+    }
+
+
+    return <Card>
+        <Card.Header onClick={() => setOpen(!open)}>
+            <p>Enter oder edit text.</p>
+        </Card.Header>
+        <Collapse in={open}>
+            <div>
                 <Card.Body>
-                    <textarea onChange={e => setText(e.target.value)} value={text}></textarea>
-                    <button onClick={() => submitFunc(text)}>Submit</button>
+                    <Form>
+                        <Form.Group>
+                            <Form.Control as="textarea" rows={3} onChange={e => setText(e.target.value)} value={text}></Form.Control>
+                        </Form.Group>
+                        <ButtonGroup className="float-right">
+                            <Button className="mr-2" onClick={() => submitAndClose(text)}>
+                                Submit
+                           </Button>
+                            <Button onClick={() => setOpen(false)}>Cancel</Button>
+                        </ButtonGroup>
+                    </Form>
                 </Card.Body>
-            </Accordion.Collapse>
-        </Card>
-    </Accordion>
+            </div>
+        </Collapse>
+    </Card>;
 
 }
 
