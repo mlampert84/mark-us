@@ -25,11 +25,13 @@ function App() {
 
   const initialSelection = getFirstId(clauses);
   // console.log("InitialSelection", initialSelection);
-  const [selectionType, setSelectionType] = useState<SelectionType | undefined>(
-    {
-      clauseId: getFirstId(clauses),
-      part: "mainVerb"
-    }
+
+  const startingSelectionType: SelectionType = {
+    clauseId: getFirstId(clauses),
+    part: "mainVerb"
+  };
+
+  const [selectionType, setSelectionType] = useState(startingSelectionType
   );
 
   const onSelectionTypeSelect = (type: SelectionType) => {
@@ -59,7 +61,7 @@ function App() {
       <MarkupText text={text}
         onSelection={onSelection}
         clauses={clauses} />
-      <Clauses text={text} clauses={clauses} onSelectionTypeSelect={onSelectionTypeSelect} />
+      <Clauses text={text} clauses={clauses} currentSelectionType={selectionType} onSelectionTypeSelect={onSelectionTypeSelect} />
 
     </Container>
   );
