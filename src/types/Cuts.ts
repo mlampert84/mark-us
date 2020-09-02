@@ -42,7 +42,7 @@ export function clauseToCuts(clause: Clause, clauseId: string): Cut[] {
 
         }
     }
-    console.log("Cuts: " + JSON.stringify(cuts));
+    // console.log("Cuts: " + JSON.stringify(cuts));
     return cuts;
 
 }
@@ -56,7 +56,7 @@ export function clausesToCuts(clauses: Map<string, Clause>): Cut[] {
     });
 
     cuts.sort(cutComparator);
-    console.log("Cuts from all clauses:", JSON.stringify(cuts));
+    // console.log("Cuts from all clauses:", JSON.stringify(cuts));
     return cuts;
 }
 

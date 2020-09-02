@@ -2,6 +2,7 @@ import React, { FunctionComponent, ReactNode } from "react";
 import { Clause, ClausePart, SelectionType } from "../types/Clause";
 import { Maybe, Nothing } from "../util/Maybe";
 import { Selection } from "../types/Selection";
+import { Table } from "react-bootstrap";
 
 
 type props = {
@@ -11,7 +12,7 @@ type props = {
 
 }
 
-function renderClausePart(text: string,
+function renderClausePartHead(text: string,
     clauseIndex: string,
     clausePart: ClausePart, selection: Maybe<Selection>,
     onSelectionTypeSelect: (s: SelectionType) => void): ReactNode {
@@ -20,20 +21,25 @@ function renderClausePart(text: string,
 
     let onClick = () => { onSelectionTypeSelect({ clauseId: clauseIndex, part: clausePart }) }
 
+    return <th key={clauseIndex + clausePart} onClick={onClick}>{clausePart}
+    </th>;
+}
+
+function renderClausePartBody(text: string,
+    clauseIndex: string,
+    clausePart: ClausePart, selection: Maybe<Selection>): ReactNode {
+
+    let cell: ReactNode;
+
     if (selection === Nothing) {
-        view = <button onClick={onClick}>Select</button>
-
+        cell = <td></td>;
     }
-
     else {
-        view = <div>
-            <span>{text.substr(selection.begin, selection.end - selection.begin)}</span>
-            <button onClick={onClick}>Reselect</button>
-        </div>;
+        cell = <td>{text.substr(selection.begin, selection.end - selection.begin)}</td>
     }
-    return <span key={clauseIndex + clausePart}>{clausePart}
-        {view}
-    </span>;
+
+    return cell;
+
 }
 
 function renderClause(text: string,
@@ -41,14 +47,19 @@ function renderClause(text: string,
     clause: Clause,
     onSelectionTypeSelect: (s: SelectionType) => void): ReactNode {
 
-    const view = [];
+    const tableHead = [];
+    const tableBody = [];
 
     for (const [key, value] of Object.entries(clause)) {
-        view.push(renderClausePart(text, clauseIndex, key as ClausePart, value, onSelectionTypeSelect));
+        tableHead.push(renderClausePartHead(text, clauseIndex, key as ClausePart, value, onSelectionTypeSelect));
+        tableBody.push(renderClausePartBody(text, clauseIndex, key as ClausePart, value));
 
     }
 
-    return <div key={clauseIndex}>{view}</div>;
+    return <Table striped bordered key={clauseIndex}>
+        <thead><tr>{tableHead}</tr></thead>
+        <tbody><tr>{tableBody}</tr></tbody>
+    </Table>;
 
 }
 

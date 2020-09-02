@@ -113,14 +113,18 @@ export function updateClause(map: Map<string, Clause>, st: SelectionType, select
 
 function addOrRemoveEmptyClauses(map: Map<string, Clause>): Map<string, Clause> {
 
-    let newMap: Map<string, Clause> = initializeClauses();
+    let newMap: Map<string, Clause> = new Map();
 
 
     map.forEach((value, key) => {
+        console.log("Checking clause: ", JSON.stringify(value))
+        console.log("Is it empty? ", clauseIsEmpty(value));
         if (!clauseIsEmpty(value)) {
             newMap.set(key, value);
         }
     })
+
+    newMap.set(genId(), emptyClause());
 
     return newMap;
 

@@ -12,11 +12,11 @@ type props = {
 };
 
 function makeSelection(text: string): null | Selection {
-  console.log(window.getSelection());
+  // console.log(window.getSelection());
 
   const range = window.getSelection()?.getRangeAt(0);
   window.getSelection()?.removeAllRanges();
-  console.log("Range:", range);
+  // console.log("Range:", range);
   if (range !== undefined) {
     if (
       range.startContainer?.parentElement?.id?.includes("start") &&
@@ -47,7 +47,7 @@ function makeSelection(text: string): null | Selection {
 
 const MarkUp: FunctionComponent<props> = ({ text, clauses, onSelection }) => {
 
-  console.log("Rerendering markup.");
+  // console.log("Rerendering markup.");
   let checkSelection = () => {
     let selection = makeSelection(text);
     if (selection !== null) {
@@ -58,7 +58,7 @@ const MarkUp: FunctionComponent<props> = ({ text, clauses, onSelection }) => {
 
   //TODO: implement clausesToSelectionsFunction
   let cuts = clausesToCuts(clauses);
-  console.log("Cuts from markup:", cuts);
+  // console.log("Cuts from markup:", cuts);
   let displaySelections: any = [];
 
   let firstSpanEnd = text.length;
@@ -92,7 +92,7 @@ const MarkUp: FunctionComponent<props> = ({ text, clauses, onSelection }) => {
 
     displaySelections.push(
       <span
-        key={cuts[i].id + cuts[i].type + cuts[i].color}
+        key={cuts[i].id + cuts[i].type + cuts[i].color + i}
         className={classes}
         id={"start-" + cuts[i].index}
         //Figure out how to handle color of overlapping selections.

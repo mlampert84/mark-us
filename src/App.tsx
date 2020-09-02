@@ -24,7 +24,7 @@ function App() {
   const [clauses, setClauses] = useState(initializeClauses);
 
   const initialSelection = getFirstId(clauses);
-  console.log("InitialSelection", initialSelection);
+  // console.log("InitialSelection", initialSelection);
   const [selectionType, setSelectionType] = useState<SelectionType | undefined>(
     {
       clauseId: getFirstId(clauses),
@@ -41,11 +41,11 @@ function App() {
     // console.log("Here is the selectionType: ", selectionType)
     if (selection !== undefined && selectionType !== undefined) {
 
-      console.log("Updating clauses...");
+      // console.log("Updating clauses...");
       setClauses(updateClause(clauses, selectionType, selection));
       // setText("Hello there");
     }
-    console.log("Clauses", clauses);
+    // console.log("Clauses", clauses);
   }
 
 
