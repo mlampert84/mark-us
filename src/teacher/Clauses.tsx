@@ -1,5 +1,5 @@
 import React, { FunctionComponent, ReactNode } from "react";
-import { Clause, ClausePart, SelectionType } from "../types/Clause";
+import { Clause, ClausePart, SelectionType, display } from "../types/Clause";
 import { Maybe, Nothing } from "../util/Maybe";
 import { Selection } from "../types/Selection";
 import { Table } from "react-bootstrap";
@@ -13,33 +13,41 @@ type props = {
 
 }
 
-function renderClausePartHead(text: string,
+function renderClausePartHead(
     clauseIndex: string,
-    clausePart: ClausePart, selection: Maybe<Selection>,
+    clausePart: ClausePart,
     currentSelectionType: SelectionType,
     onSelectionTypeSelect: (s: SelectionType) => void): ReactNode {
-
-    let view: ReactNode;
 
     let onClick = () => { onSelectionTypeSelect({ clauseId: clauseIndex, part: clausePart }) }
 
     let currentlyActive = currentSelectionType.clauseId === clauseIndex && currentSelectionType.part === clausePart;
 
-    return <th key={clauseIndex + clausePart} onClick={onClick} className={currentlyActive ? 'selecting' : ''}>{clausePart}
+    return <th key={clauseIndex + clausePart} onClick={onClick} className={"pointer " + (currentlyActive ? 'selecting' : '')}>{display[clausePart][0]}
     </th>;
 }
 
 function renderClausePartBody(text: string,
-    clauseIndex: string,
-    clausePart: ClausePart, selection: Maybe<Selection>): ReactNode {
+    selection: Maybe<Selection>): ReactNode {
 
     let cell: ReactNode;
 
     if (selection === Nothing) {
-        cell = <td></td>;
+        cell = <td>&nbsp;</td>;
     }
     else {
-        cell = <td>{text.substr(selection.begin, selection.end - selection.begin)}</td>
+
+        const testSelection: String = text.substr(selection.begin, selection.end - selection.begin);
+
+        let displaySelection: String;
+
+        if (testSelection === "s") {
+            displaySelection = "es";
+        } else {
+            displaySelection = testSelection;
+        }
+
+        cell = <td>{displaySelection}</td>
     }
 
     return cell;
@@ -56,8 +64,8 @@ function renderClause(text: string,
     const tableBody = [];
 
     for (const [key, value] of Object.entries(clause)) {
-        tableHead.push(renderClausePartHead(text, clauseIndex, key as ClausePart, value, currentSelectionType, onSelectionTypeSelect));
-        tableBody.push(renderClausePartBody(text, clauseIndex, key as ClausePart, value));
+        tableHead.push(renderClausePartHead(clauseIndex, key as ClausePart, currentSelectionType, onSelectionTypeSelect));
+        tableBody.push(renderClausePartBody(text, value));
 
     }
 

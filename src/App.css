@@ -1,5 +1,29 @@
 
+.title{
+  margin: 50px 20px;
+  color: green !important;
+}
+
+.paddingBottom{
+  background-color: peru;
+  padding-bottom: 15px;
+}
+
 .selecting{
   background-color: black;
   color: white;
+}
+
+.markup-text{
+  line-height: 300%;
+  font-size: 20px;
+  letter-spacing: 2px;
+}
+
+.selection{
+  color: white;
+}
+
+.pointer {
+  cursor: pointer;
 }

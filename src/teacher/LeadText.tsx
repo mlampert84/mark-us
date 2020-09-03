@@ -1,5 +1,5 @@
-import React, { FunctionComponent, useState, useRef } from 'react';
-import { Accordion, Card, Button, ButtonGroup, Form, useAccordionToggle, Collapse, ButtonToolbar } from 'react-bootstrap';
+import React, { FunctionComponent, useState } from 'react';
+import { Card, Button, ButtonGroup, Form, Collapse } from 'react-bootstrap';
 
 type TextSubmitProps = {
     initialText: string,
@@ -20,14 +20,14 @@ const TextSubmit: FunctionComponent<TextSubmitProps> = ({ initialText, submitFun
 
 
     return <Card>
-        <Card.Header onClick={() => setOpen(!open)}>
+        <Card.Header onClick={() => setOpen(!open)} className="pointer">
             <p>Enter oder edit text.</p>
         </Card.Header>
         <Collapse in={open}>
-            <div>
+            <div className="paddingBottom">
                 <Card.Body>
                     <Form>
-                        <Form.Group>
+                        <Form.Group >
                             <Form.Control as="textarea" rows={3} onChange={e => setText(e.target.value)} value={text}></Form.Control>
                         </Form.Group>
                         <ButtonGroup className="float-right">

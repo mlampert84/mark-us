@@ -1,7 +1,15 @@
 import { Maybe, Nothing } from "../util/Maybe";
 import { Selection } from "./Selection";
 
-export type ClausePart = "mainVerb" | "verbPart" | "subject" | "accusative" | "dative" | "genitive";
+export type ClausePart =
+    "subject" |
+    "mainVerb" |
+    "verbPart" |
+    "accusative" |
+    "dative" |
+    "genitive" |
+    "reflexive" |
+    "predicate";
 
 
 export type Clause = {
@@ -12,12 +20,15 @@ export type Clause = {
 export function emptyClause(): Clause {
 
     return {
+        subject: Nothing,
         mainVerb: Nothing,
         verbPart: Nothing,
-        subject: Nothing,
         accusative: Nothing,
         dative: Nothing,
-        genitive: Nothing
+        genitive: Nothing,
+        reflexive: Nothing,
+        predicate: Nothing
+
     }
 
 }
@@ -37,6 +48,38 @@ export interface SelectionType {
     part: ClausePart
 }
 
+//TODO: THis function does not work properly.
+export function nextSelectionType(current: SelectionType,
+    clauses: Map<string, Clause>): SelectionType {
+
+    if (current.part === "subject") {
+        return {
+            clauseId: current.clauseId,
+            part: "mainVerb"
+        }
+    }
+    else {
+        return {
+            clauseId: findEmptyClause(clauses),
+            part: "subject"
+        }
+    }
+
+
+}
+
+function findEmptyClause(clauses: Map<string, Clause>): string {
+
+    clauses.forEach((value, key) => {
+        if (clauseIsEmpty(value)) {
+            return key;
+        }
+    });
+
+    return "";
+
+
+}
 
 type ClausePartDisplay = {
     [key in ClausePart]: [string, string]
@@ -45,13 +88,16 @@ type ClausePartDisplay = {
 
 export const display: ClausePartDisplay =
 {
-    mainVerb: ["Verb", "lightgreen"],
-    verbPart: ["Verbzusatz", "lightgreen"],
-    subject: ["Subjekt", "pink"],
-    accusative: ["Akkusativobjekt", "yellow"],
-    dative: ["Dativbobjekt", "lightblue"],
-    genitive: ["Genitivobjekt", "violet"]
+    mainVerb: ["Verb", "red"],
+    verbPart: ["Verbzusatz", "red"],
+    subject: ["Subjekt", "blue"],
+    predicate: ["Prädikatsnomen", "blue"],
+    accusative: ["Akkusativobjekt", "green"],
+    dative: ["Dativbobjekt", "purple"],
+    genitive: ["Genitivobjekt", "orange"],
+    reflexive: ["Reflexivpronomen", "blue"]
 }
+
 
 export function mapGrammarPartToColor(part: ClausePart): string {
 

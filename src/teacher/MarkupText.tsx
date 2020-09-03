@@ -88,7 +88,13 @@ const MarkUp: FunctionComponent<props> = ({ text, clauses, onSelection }) => {
       activeIds.splice(activeIds.indexOf(cuts[i].id), 1);
     }
 
+
+
     let classes = activeIds.join(" ");
+
+    if (activeIds.length > 0) {
+      classes += ", selection";
+    }
 
     displaySelections.push(
       <span
@@ -112,7 +118,7 @@ const MarkUp: FunctionComponent<props> = ({ text, clauses, onSelection }) => {
   return (
     <>
       <Jumbotron>
-        <p onMouseUp={checkSelection} id="text-root">
+        <p onMouseUp={checkSelection} id="text-root" className="markup-text">
           {displaySelections}
         </p>
       </Jumbotron>

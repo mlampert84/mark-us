@@ -3,7 +3,7 @@ import { Container, Row } from 'react-bootstrap';
 import './App.css';
 import TextSubmit from './teacher/LeadText';
 import MarkupText from './teacher/MarkupText';
-import { initializeClauses, SelectionType, getFirstId, updateClause } from './types/Clause';
+import { initializeClauses, SelectionType, getFirstId, updateClause, nextSelectionType } from './types/Clause';
 import { Selection } from './types/Selection';
 import Clauses from './teacher/Clauses';
 import sentences from './teacher/SentenceExamples';
@@ -23,12 +23,9 @@ function App() {
 
   const [clauses, setClauses] = useState(initializeClauses);
 
-  const initialSelection = getFirstId(clauses);
-  // console.log("InitialSelection", initialSelection);
-
   const startingSelectionType: SelectionType = {
     clauseId: getFirstId(clauses),
-    part: "mainVerb"
+    part: "subject"
   };
 
   const [selectionType, setSelectionType] = useState(startingSelectionType
@@ -44,7 +41,12 @@ function App() {
     if (selection !== undefined && selectionType !== undefined) {
 
       // console.log("Updating clauses...");
-      setClauses(updateClause(clauses, selectionType, selection));
+
+      const updatedClauses = updateClause(clauses, selectionType, selection);
+      setClauses(updatedClauses);
+
+      const nextSelection: SelectionType = nextSelectionType(selectionType, updatedClauses);
+      setSelectionType(nextSelection);
       // setText("Hello there");
     }
     // console.log("Clauses", clauses);
@@ -56,7 +58,7 @@ function App() {
 
   return (
     <Container >
-      <Row><h2>Der Satzanalyzator</h2></Row>
+      <Row><h2 className="title">Satzanalysator</h2></Row>
       <TextSubmit initialText={text} submitFunc={onTextSubmit} />
       <MarkupText text={text}
         onSelection={onSelection}
