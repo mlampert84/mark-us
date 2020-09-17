@@ -27,3 +27,21 @@
 .pointer {
   cursor: pointer;
 }
+
+.closeButton{
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  background-color: red;
+  color: white;
+  font-size: 25px;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  font-weight: bold;
+}
+
+.closeButtonHolder{
+  position: relative;
+}

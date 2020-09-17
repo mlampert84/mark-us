@@ -48,7 +48,6 @@ export interface SelectionType {
     part: ClausePart
 }
 
-//TODO: THis function does not work properly.
 export function nextSelectionType(current: SelectionType,
     clauses: Map<string, Clause>): SelectionType {
 
@@ -58,23 +57,17 @@ export function nextSelectionType(current: SelectionType,
             part: "mainVerb"
         }
     }
-    else {
-        return {
-            clauseId: findEmptyClause(clauses),
-            part: "subject"
-        }
-    }
-
+    return current;
 
 }
 
 function findEmptyClause(clauses: Map<string, Clause>): string {
 
-    clauses.forEach((value, key) => {
+    for (let [key, value] of clauses) {
         if (clauseIsEmpty(value)) {
             return key;
         }
-    });
+    }
 
     return "";
 
@@ -119,22 +112,10 @@ export function initializeClauses(): Map<string, Clause> {
 }
 
 
-function hasEmptyClause(map: Map<string, Clause>): boolean {
-    map.forEach((value) => {
-        if (clauseIsEmpty(value)) {
-            return true;
-        }
-    });
-    return false;
-}
-
 export function getFirstId(map: Map<string, Clause>): string {
-    // console.log("HEEEEELLLLOO");
     let keys = Array.from(map.keys());
-    // console.log("Keys: ", keys);
 
     for (let k of keys) {
-        // console.log("Returning first id: ", k);
         return k;
     }
 
@@ -145,7 +126,6 @@ export function updateClause(map: Map<string, Clause>, st: SelectionType, select
 
     let newMap: Map<string, Clause> = cloneMap(map);
 
-    // console.log("updating cluase with id " + st.clauseId)
     let clause = newMap.get(st.clauseId);
     if (clause !== undefined) {
         clause[st.part] = selection;
@@ -155,6 +135,24 @@ export function updateClause(map: Map<string, Clause>, st: SelectionType, select
 
     return addOrRemoveEmptyClauses(newMap);
 }
+
+
+
+export function deleteClausePart(id: string, part: ClausePart, clauses: Map<string, Clause>): Map<string, Clause> {
+
+    let newMap: Map<string, Clause> = cloneMap(clauses);
+
+    for (let [key, value] of clauses) {
+
+        if (key === id) {
+            value[part] = Nothing;
+            break;
+        }
+    }
+
+    return newMap;
+}
+
 
 
 function addOrRemoveEmptyClauses(map: Map<string, Clause>): Map<string, Clause> {

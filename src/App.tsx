@@ -3,7 +3,7 @@ import { Container, Row } from 'react-bootstrap';
 import './App.css';
 import TextSubmit from './teacher/LeadText';
 import MarkupText from './teacher/MarkupText';
-import { initializeClauses, SelectionType, getFirstId, updateClause, nextSelectionType } from './types/Clause';
+import { ClausePart, initializeClauses, SelectionType, getFirstId, updateClause, nextSelectionType, deleteClausePart } from './types/Clause';
 import { Selection } from './types/Selection';
 import Clauses from './teacher/Clauses';
 import sentences from './teacher/SentenceExamples';
@@ -35,6 +35,9 @@ function App() {
     setSelectionType(type);
   }
 
+  const onSelectionDelete = (id: string, part: ClausePart) => {
+    setClauses(deleteClausePart(id, part, clauses));
+  }
 
   const onSelection = (selection?: Selection) => {
     // console.log("Here is the selectionType: ", selectionType)
@@ -53,9 +56,6 @@ function App() {
   }
 
 
-  //This is just a type placeholder.  Remove one you can convert clauses to an array of selections.
-  let selections: Selection[] = [];
-
   return (
     <Container >
       <Row><h2 className="title">Satzanalysator</h2></Row>
@@ -63,7 +63,12 @@ function App() {
       <MarkupText text={text}
         onSelection={onSelection}
         clauses={clauses} />
-      <Clauses text={text} clauses={clauses} currentSelectionType={selectionType} onSelectionTypeSelect={onSelectionTypeSelect} />
+      <Clauses
+        text={text}
+        clauses={clauses}
+        currentSelectionType={selectionType}
+        onSelectionTypeSelect={onSelectionTypeSelect}
+        onSelectionDelete={onSelectionDelete} />
 
     </Container>
   );

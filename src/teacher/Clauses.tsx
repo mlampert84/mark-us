@@ -10,7 +10,7 @@ type props = {
     clauses: Map<string, Clause>;
     currentSelectionType: SelectionType,
     onSelectionTypeSelect: (type: SelectionType) => void;
-
+    onSelectionDelete: (id: string, part: ClausePart) => void;
 }
 
 function renderClausePartHead(
@@ -28,7 +28,11 @@ function renderClausePartHead(
 }
 
 function renderClausePartBody(text: string,
-    selection: Maybe<Selection>): ReactNode {
+    selection: Maybe<Selection>,
+    clauseIndex: string,
+    clausePart: ClausePart,
+    onSelectionDelete: (id: string, part: ClausePart) => void
+): ReactNode {
 
     let cell: ReactNode;
 
@@ -36,6 +40,8 @@ function renderClausePartBody(text: string,
         cell = <td>&nbsp;</td>;
     }
     else {
+
+        let onDeleteClick = () => { onSelectionDelete(clauseIndex, clausePart) };
 
         const testSelection: String = text.substr(selection.begin, selection.end - selection.begin);
 
@@ -47,7 +53,10 @@ function renderClausePartBody(text: string,
             displaySelection = testSelection;
         }
 
-        cell = <td>{displaySelection}</td>
+        cell = <td className="closeButtonHolder">
+            {displaySelection}
+            <span className="closeButton" onClick={onDeleteClick}>&times;</span>
+        </td>
     }
 
     return cell;
@@ -58,14 +67,15 @@ function renderClause(text: string,
     clauseIndex: string,
     clause: Clause,
     currentSelectionType: SelectionType,
-    onSelectionTypeSelect: (s: SelectionType) => void): ReactNode {
+    onSelectionTypeSelect: (s: SelectionType) => void,
+    onSelectionDelete: (id: string, part: ClausePart) => void): ReactNode {
 
     const tableHead = [];
     const tableBody = [];
 
     for (const [key, value] of Object.entries(clause)) {
         tableHead.push(renderClausePartHead(clauseIndex, key as ClausePart, currentSelectionType, onSelectionTypeSelect));
-        tableBody.push(renderClausePartBody(text, value));
+        tableBody.push(renderClausePartBody(text, value, clauseIndex, key as ClausePart, onSelectionDelete));
 
     }
 
@@ -76,11 +86,11 @@ function renderClause(text: string,
 
 }
 
-const Clauses: FunctionComponent<props> = ({ text, clauses, currentSelectionType, onSelectionTypeSelect }) => {
+const Clauses: FunctionComponent<props> = ({ text, clauses, currentSelectionType, onSelectionTypeSelect, onSelectionDelete }) => {
 
     let clauseDisplay: ReactNode[] = [];
     clauses.forEach((clause, index) => {
-        clauseDisplay.push(renderClause(text, index, clause, currentSelectionType, onSelectionTypeSelect));
+        clauseDisplay.push(renderClause(text, index, clause, currentSelectionType, onSelectionTypeSelect, onSelectionDelete));
 
     })
 
