@@ -61,19 +61,6 @@ export function nextSelectionType(current: SelectionType,
 
 }
 
-function findEmptyClause(clauses: Map<string, Clause>): string {
-
-    for (let [key, value] of clauses) {
-        if (clauseIsEmpty(value)) {
-            return key;
-        }
-    }
-
-    return "";
-
-
-}
-
 type ClausePartDisplay = {
     [key in ClausePart]: [string, string]
 }

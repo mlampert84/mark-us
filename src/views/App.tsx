@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { Container, Row } from 'react-bootstrap';
-import './App.css';
-import TextSubmit from './teacher/LeadText';
-import MarkupText from './teacher/MarkupText';
-import { ClausePart, initializeClauses, SelectionType, getFirstId, updateClause, nextSelectionType, deleteClausePart } from './types/Clause';
-import { Selection } from './types/Selection';
-import Clauses from './teacher/Clauses';
-import sentences from './teacher/SentenceExamples';
+import TextSubmit from './LeadText';
+import MarkupText from './MarkupText';
+import { ClausePart, initializeClauses, SelectionType, getFirstId, updateClause, nextSelectionType, deleteClausePart } from '../types/Clause';
+import { Selection } from '../types/Selection';
+import Clauses from './Clauses';
+import sentences from './SentenceExamples';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
