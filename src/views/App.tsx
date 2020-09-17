@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Row } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import TextSubmit from './LeadText';
 import MarkupText from './MarkupText';
 import { ClausePart, initializeClauses, SelectionType, getFirstId, updateClause, nextSelectionType, deleteClausePart } from '../types/Clause';
@@ -57,7 +57,16 @@ function App() {
 
   return (
     <Container >
-      <Row><h2 className="title">Satzanalysator</h2></Row>
+      <Row>
+        <Col>
+          <h2 className="title">Satzanalyzator</h2>
+
+        </Col>
+        <Col>
+          <div className="help">Help</div>
+
+        </Col>
+      </Row>
       <TextSubmit initialText={text} submitFunc={onTextSubmit} />
       <MarkupText text={text}
         onSelection={onSelection}

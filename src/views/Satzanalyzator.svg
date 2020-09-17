@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg5074"
+   version="1.1"
+   viewBox="0 0 103.3951 51.148667"
+   height="193.31778"
+   width="390.78464">
+  <defs
+     id="defs5068" />
+  <metadata
+     id="metadata5071">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-86.065866,-22.369201)"
+     id="layer1">
+    <path
+       id="path5076"
+       d="m 130.33958,23.99158 c 48.3114,34.036259 48.3114,34.036259 48.3114,34.036259"
+       style="fill:#000000;fill-opacity:0.36862745;stroke:#000000;stroke-width:0.625709;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <flowRoot
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:Purisa;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot5928"
+       xml:space="preserve"><flowRegion
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:Purisa"
+         id="flowRegion5930"><rect
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:Purisa"
+           y="145.37683"
+           x="331.42856"
+           height="132.40038"
+           width="58.501583"
+           id="rect5932" /></flowRegion><flowPara
+         id="flowPara5934" /></flowRoot>    <flowRoot
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:Purisa;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot5936"
+       xml:space="preserve"><flowRegion
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:Purisa"
+         id="flowRegion5938"><rect
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Purisa;-inkscape-font-specification:Purisa"
+           y="233.94826"
+           x="389.93015"
+           height="43.828945"
+           width="41.498417"
+           id="rect5940" /></flowRegion><flowPara
+         id="flowPara5942" /></flowRoot>    <text
+       id="text5969"
+       y="52.299454"
+       x="86.231117"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:46.85543823px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:Purisa;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.39046195"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.11249542px;font-family:Sawasdee;-inkscape-font-specification:Sawasdee;stroke-width:0.39046195"
+         y="52.299454"
+         x="86.231117"
+         id="tspan5967">Der</tspan></text>
+    <text
+       id="text871"
+       y="68.574844"
+       x="101.04719"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.23026085px;line-height:1.25;font-family:Purisa;-inkscape-font-specification:Purisa;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.35575652"
+       xml:space="preserve"><tspan
+         style="stroke-width:0.35575652"
+         id="tspan869"
+         y="68.574844"
+         x="101.04719"><tspan
+           id="tspan867"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.23026085px;font-family:Sawasdee;-inkscape-font-specification:Sawasdee;stroke-width:0.35575652"
+           y="68.574844"
+           x="101.04719">Satzanalyzator</tspan></tspan></text>
+    <path
+       style="fill:#000000;fill-opacity:0.36862745;stroke:#000000;stroke-width:0.7973817;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 149.94718,37.965503 119.14709,57.305931"
+       id="path5909-7" />
+    <path
+       style="fill:#000000;fill-opacity:0.36862745;stroke:#000000;stroke-width:0.58640945;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 130.36273,23.946893 C 103.70025,39.133484 103.70025,39.133484 103.70025,39.133484"
+       id="path5909-7-5" />
+  </g>
+</svg>
