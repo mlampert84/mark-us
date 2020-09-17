@@ -1,14 +1,6 @@
 
 # Todo
 
-## Navbar
-
-## Teacher View
-- Enter text
-- Create categorie
-- Mark text with categories
-
-
-## Student
-- Mark text
-
+# Make help section
+# Make detailed readme
+# Make new favicon

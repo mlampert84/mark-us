@@ -81,14 +81,14 @@ type ClausePartDisplay = {
 
 export const display: ClausePartDisplay =
 {
-    mainVerb: ["Verb", "red"],
-    verbPart: ["Verbzusatz", "red"],
-    subject: ["Subjekt", "blue"],
-    predicate: ["Prädikatsnomen", "blue"],
-    accusative: ["Akkusativobjekt", "green"],
-    dative: ["Dativbobjekt", "purple"],
-    genitive: ["Genitivobjekt", "orange"],
-    reflexive: ["Reflexivpronomen", "blue"]
+    mainVerb: ["Verb", "#872154"],
+    verbPart: ["Verbzusatz", "#aa4399"],
+    subject: ["Subjekt", "#44aa99"],
+    predicate: ["Prädikatsnomen", "#87ccee"],
+    accusative: ["Akkusativobjekt", "#217733"],
+    dative: ["Dativbobjekt", "#332288"],
+    genitive: ["Genitivobjekt", "#ddcc76"],
+    reflexive: ["Reflexivpronomen", "#999932"]
 }
 
 
