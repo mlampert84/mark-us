@@ -68,7 +68,7 @@ function App() {
     <>
       <Help show={helpModal}
         close={closeModal}
-        open={openModal} />
+      />
       <Container >
         <Row>
           <Col>

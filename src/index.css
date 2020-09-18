@@ -9,6 +9,10 @@
   cursor: pointer;
 }
 
+.helpList{
+  padding-left: 20px;
+}
+
 .test{
   background-color: red;
 }
