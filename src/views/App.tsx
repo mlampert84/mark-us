@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import TextSubmit from './LeadText';
 import MarkupText from './MarkupText';
+import Help from './Help';
 import { ClausePart, initializeClauses, SelectionType, getFirstId, updateClause, nextSelectionType, deleteClausePart } from '../types/Clause';
 import { Selection } from '../types/Selection';
 import Clauses from './Clauses';
@@ -10,6 +11,14 @@ import sentences from './SentenceExamples';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
+
+
+
+  const [helpModal, setHelpModal] = useState(false);
+
+  const closeModal = () => setHelpModal(false);
+  const openModal = () => setHelpModal(true);
+
 
   let exampleText = sentences[Math.floor(Math.random() * sentences.length)]
 
@@ -56,29 +65,34 @@ function App() {
 
 
   return (
-    <Container >
-      <Row>
-        <Col>
-          <h2 className="title">Satzanalyzator</h2>
+    <>
+      <Help show={helpModal}
+        close={closeModal}
+        open={openModal} />
+      <Container >
+        <Row>
+          <Col>
+            <h2 className="title">Satzanalyzator</h2>
 
-        </Col>
-        <Col>
-          <div className="help">Help</div>
+          </Col>
+          <Col>
+            <div className="help" onClick={openModal}>Help</div>
 
-        </Col>
-      </Row>
-      <TextSubmit initialText={text} submitFunc={onTextSubmit} />
-      <MarkupText text={text}
-        onSelection={onSelection}
-        clauses={clauses} />
-      <Clauses
-        text={text}
-        clauses={clauses}
-        currentSelectionType={selectionType}
-        onSelectionTypeSelect={onSelectionTypeSelect}
-        onSelectionDelete={onSelectionDelete} />
+          </Col>
+        </Row>
+        <TextSubmit initialText={text} submitFunc={onTextSubmit} />
+        <MarkupText text={text}
+          onSelection={onSelection}
+          clauses={clauses} />
+        <Clauses
+          text={text}
+          clauses={clauses}
+          currentSelectionType={selectionType}
+          onSelectionTypeSelect={onSelectionTypeSelect}
+          onSelectionDelete={onSelectionDelete} />
 
-    </Container>
+      </Container>
+    </>
   );
 }
 

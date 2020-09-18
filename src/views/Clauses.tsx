@@ -86,7 +86,7 @@ function renderClause(text: string,
 
 }
 
-const Clauses: FunctionComponent<props> = ({ text, clauses, currentSelectionType, onSelectionTypeSelect, onSelectionDelete }) => {
+const Clauses: FunctionComponent<props> = ({ text, clauses, currentSelectionType, onSelectionTypeSelect, onSelectionDelete }: props) => {
 
     let clauseDisplay: ReactNode[] = [];
     clauses.forEach((clause, index) => {
