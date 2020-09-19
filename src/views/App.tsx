@@ -72,7 +72,7 @@ function App() {
       <Container >
         <Row>
           <Col>
-            <h2 className="title">Satzanalyzator</h2>
+            <h2 className="title">Satzanalysator</h2>
 
           </Col>
           <Col>

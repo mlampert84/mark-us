@@ -1,9 +1,9 @@
-# Satzanalyzator
+# Satzanalysator
 
 
 ## Use Case
 
-The Satzanalyzator is a grammar annotation tool. It allows students of German to identify the most important parts of speech in a sentence. It arose from the pedagogical insight that learning to read in German is best accomplished by identifying key parts of speech, namely a verb and the various nouns and pronouns that the verb coordinates, such as the subject, accusative object, dative object, etc.
+The Satzanalysator is a grammar annotation tool. It allows students of German to identify the most important parts of speech in a sentence. It arose from the pedagogical insight that learning to read in German is best accomplished by identifying key parts of speech, namely a verb and the various nouns and pronouns that the verb coordinates, such as the subject, accusative object, dative object, etc.
 
 How to use the application:
 - Enter the text you want to annote, or use the example text.
@@ -17,3 +17,9 @@ Built with React, using only Functional Components, and Typescript.
 To run locally:
 - `npm run start`
 - point your browser to `localhost:3000`
+
+
+## ToDos
+- Deploy to satzanalysator.com
+- Make syntax trees to replace table
+- Make display splitscreen

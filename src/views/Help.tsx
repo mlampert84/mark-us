@@ -7,7 +7,7 @@ type props = {
 }
 
 const helpIntro: string =
-    "The Satzanalyzator is a grammar annotation tool. " +
+    "The Satzanalysator is a grammar annotation tool. " +
     "It allows students of German to " +
     "identify the most important parts of speech in a sentence. " +
     "It arose from the pedagogical insight that learning to read in German " +
