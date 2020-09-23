@@ -1,5 +1,5 @@
 import React, { FunctionComponent, ReactNode } from "react";
-import { Clause, ClausePart, SelectionType, display } from "../types/Clause";
+import { Clause, ClausePart, SelectionType, display, mapGrammarPartToColor } from "../types/Clause";
 import { Maybe, Nothing } from "../util/Maybe";
 import { Selection } from "../types/Selection";
 import { Table } from "react-bootstrap";
@@ -8,7 +8,7 @@ import { Table } from "react-bootstrap";
 type props = {
     text: string,
     clauses: Map<string, Clause>;
-    currentSelectionType: SelectionType,
+    selecting: SelectionType,
     onSelectionTypeSelect: (type: SelectionType) => void;
     onSelectionDelete: (id: string, part: ClausePart) => void;
 }
@@ -16,14 +16,20 @@ type props = {
 function renderClausePartHead(
     clauseIndex: string,
     clausePart: ClausePart,
-    currentSelectionType: SelectionType,
+    selecting: SelectionType,
     onSelectionTypeSelect: (s: SelectionType) => void): ReactNode {
 
     let onClick = () => { onSelectionTypeSelect({ clauseId: clauseIndex, part: clausePart }) }
 
-    let currentlyActive = currentSelectionType.clauseId === clauseIndex && currentSelectionType.part === clausePart;
+    let currentlyActive = selecting.clauseId === clauseIndex && selecting.part === clausePart;
 
-    return <th key={clauseIndex + clausePart} onClick={onClick} className={"pointer " + (currentlyActive ? 'selecting' : '')}>{display[clausePart][0]}
+    let style = { backgroundColor: mapGrammarPartToColor(clausePart) }
+
+    return <th
+        key={clauseIndex + clausePart}
+        onClick={onClick}
+        className={"pointer white-text" + (currentlyActive ? 'selecting' : '')}
+        style={style}>{display[clausePart][0]}
     </th>;
 }
 
@@ -31,10 +37,13 @@ function renderClausePartBody(text: string,
     selection: Maybe<Selection>,
     clauseIndex: string,
     clausePart: ClausePart,
+    selecting: SelectionType,
     onSelectionDelete: (id: string, part: ClausePart) => void
 ): ReactNode {
 
     let cell: ReactNode;
+
+    let currentlyActive = selecting.clauseId === clauseIndex && selecting.part === clausePart;
 
     if (selection === Nothing) {
         cell = <td>&nbsp;</td>;
@@ -47,7 +56,10 @@ function renderClausePartBody(text: string,
 
         let displaySelection: String;
 
-        if (testSelection === "s") {
+        if (currentlyActive) {
+            displaySelection = "Selecting...";
+        }
+        else if (testSelection === "s") {
             displaySelection = "es";
         } else {
             displaySelection = testSelection;
@@ -66,7 +78,7 @@ function renderClausePartBody(text: string,
 function renderClause(text: string,
     clauseIndex: string,
     clause: Clause,
-    currentSelectionType: SelectionType,
+    selecting: SelectionType,
     onSelectionTypeSelect: (s: SelectionType) => void,
     onSelectionDelete: (id: string, part: ClausePart) => void): ReactNode {
 
@@ -74,8 +86,8 @@ function renderClause(text: string,
     const tableBody = [];
 
     for (const [key, value] of Object.entries(clause)) {
-        tableHead.push(renderClausePartHead(clauseIndex, key as ClausePart, currentSelectionType, onSelectionTypeSelect));
-        tableBody.push(renderClausePartBody(text, value, clauseIndex, key as ClausePart, onSelectionDelete));
+        tableHead.push(renderClausePartHead(clauseIndex, key as ClausePart, selecting, onSelectionTypeSelect));
+        tableBody.push(renderClausePartBody(text, value, clauseIndex, key as ClausePart, selecting, onSelectionDelete));
 
     }
 
@@ -86,11 +98,11 @@ function renderClause(text: string,
 
 }
 
-const Clauses: FunctionComponent<props> = ({ text, clauses, currentSelectionType, onSelectionTypeSelect, onSelectionDelete }: props) => {
+const Clauses: FunctionComponent<props> = ({ text, clauses, selecting, onSelectionTypeSelect, onSelectionDelete }: props) => {
 
     let clauseDisplay: ReactNode[] = [];
     clauses.forEach((clause, index) => {
-        clauseDisplay.push(renderClause(text, index, clause, currentSelectionType, onSelectionTypeSelect, onSelectionDelete));
+        clauseDisplay.push(renderClause(text, index, clause, selecting, onSelectionTypeSelect, onSelectionDelete));
 
     })
 

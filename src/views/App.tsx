@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
 import TextSubmit from './LeadText';
 import MarkupText from './MarkupText';
 import Help from './Help';
-import { ClausePart, initializeClauses, SelectionType, getFirstId, updateClause, nextSelectionType, deleteClausePart } from '../types/Clause';
+import { ClausePart, initializeClauses, SelectionType, getFirstId, updateClause, nextSelectionType, deleteClausePart, addClause } from '../types/Clause';
 import { Selection } from '../types/Selection';
 import Clauses from './Clauses';
 import sentences from './SentenceExamples';
@@ -26,10 +26,15 @@ function App() {
 
   const onTextSubmit = (text: string) => {
     setText(text);
+    setClauses(initializeClauses);
   }
 
 
   const [clauses, setClauses] = useState(initializeClauses);
+
+
+  const onAddClause = () => setClauses(addClause(clauses));
+
 
   const startingSelectionType: SelectionType = {
     clauseId: getFirstId(clauses),
@@ -65,11 +70,12 @@ function App() {
 
 
   return (
-    <>
-      <Help show={helpModal}
-        close={closeModal}
-      />
-      <Container >
+    <div className="flexbox">
+      <div className="flex-item padding">
+        <Help show={helpModal}
+          close={closeModal}
+        />
+        {/* <Container > */}
         <Row>
           <Col>
             <h2 className="title">Satzanalysator</h2>
@@ -84,15 +90,21 @@ function App() {
         <MarkupText text={text}
           onSelection={onSelection}
           clauses={clauses} />
+        {/* </Container> */}
+      </div>
+      <div className="flex-item clause-col">
+
         <Clauses
           text={text}
           clauses={clauses}
-          currentSelectionType={selectionType}
+          selecting={selectionType}
           onSelectionTypeSelect={onSelectionTypeSelect}
           onSelectionDelete={onSelectionDelete} />
 
-      </Container>
-    </>
+        <Button onClick={onAddClause}>New Clause</Button>
+      </div>
+
+    </div>
   );
 }
 

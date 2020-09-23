@@ -120,7 +120,7 @@ export function updateClause(map: Map<string, Clause>, st: SelectionType, select
         console.log("Could not update clause.  Id not found.");
     }
 
-    return addOrRemoveEmptyClauses(newMap);
+    return removeEmptyClauses(newMap);
 }
 
 
@@ -142,7 +142,7 @@ export function deleteClausePart(id: string, part: ClausePart, clauses: Map<stri
 
 
 
-function addOrRemoveEmptyClauses(map: Map<string, Clause>): Map<string, Clause> {
+function removeEmptyClauses(map: Map<string, Clause>): Map<string, Clause> {
 
     let newMap: Map<string, Clause> = new Map();
 
@@ -155,10 +155,17 @@ function addOrRemoveEmptyClauses(map: Map<string, Clause>): Map<string, Clause> 
         }
     })
 
-    newMap.set(genId(), emptyClause());
+    // newMap.set(genId(), emptyClause());
 
     return newMap;
 
+}
+
+export function addClause(map: Map<string, Clause>): Map<string, Clause> {
+    let newMap = cloneMap(map);
+    newMap.set(genId(), emptyClause());
+
+    return newMap
 }
 
 function cloneMap(map: Map<string, Clause>): Map<string, Clause> {
