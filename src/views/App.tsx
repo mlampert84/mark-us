@@ -41,8 +41,7 @@ function App() {
     part: "subject"
   };
 
-  const [selectionType, setSelectionType] = useState(startingSelectionType
-  );
+  const [selectionType, setSelectionType] = useState(startingSelectionType);
 
   const onSelectionTypeSelect = (type: SelectionType) => {
     setSelectionType(type);

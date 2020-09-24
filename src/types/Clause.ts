@@ -48,7 +48,10 @@ export interface SelectionType {
     part: ClausePart
 }
 
-export function nextSelectionType(current: SelectionType,
+
+//TODO: Change to Maybe SelectionType
+export function nextSelectionType(
+    current: SelectionType,
     clauses: Map<string, Clause>): SelectionType {
 
     if (current.part === "subject") {
@@ -57,8 +60,12 @@ export function nextSelectionType(current: SelectionType,
             part: "mainVerb"
         }
     }
-    return current;
 
+    //TODO: This is a nothing value
+    return {
+        clauseId: "",
+        part: "mainVerb"
+    }
 }
 
 type ClausePartDisplay = {

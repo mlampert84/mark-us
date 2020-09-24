@@ -41,37 +41,40 @@ function renderClausePartBody(text: string,
     onSelectionDelete: (id: string, part: ClausePart) => void
 ): ReactNode {
 
-    let cell: ReactNode;
+    let cellContent: ReactNode;
 
     let currentlyActive = selecting.clauseId === clauseIndex && selecting.part === clausePart;
+    console.log("Selecting: ", selecting);
+    console.log("Currently Active: ", currentlyActive);
 
-    if (selection === Nothing) {
-        cell = <td>&nbsp;</td>;
+
+    let onDeleteClick = () => { onSelectionDelete(clauseIndex, clausePart) };
+
+    if (currentlyActive) {
+        cellContent = "Selecting...";
+    }
+    else if (selection === Nothing) {
+        cellContent = ""
     }
     else {
-
-        let onDeleteClick = () => { onSelectionDelete(clauseIndex, clausePart) };
 
         const testSelection: String = text.substr(selection.begin, selection.end - selection.begin);
 
         let displaySelection: String;
 
-        if (currentlyActive) {
-            displaySelection = "Selecting...";
-        }
-        else if (testSelection === "s") {
+        if (testSelection === "s") {
             displaySelection = "es";
         } else {
             displaySelection = testSelection;
         }
 
-        cell = <td className="closeButtonHolder">
+        cellContent = <>
             {displaySelection}
             <span className="closeButton" onClick={onDeleteClick}>&times;</span>
-        </td>
+        </>
     }
 
-    return cell;
+    return <td key={clauseIndex + "head" + clausePart} className="closeButtonHolder">{cellContent}</td>;
 
 }
 
