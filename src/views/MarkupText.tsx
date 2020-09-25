@@ -1,14 +1,17 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useState, useRef, useEffect } from "react";
+import { Jumbotron } from "react-bootstrap";
+import Menu, { MenuPosition } from "./PartOfSpeechMenu";
 import { Selection, fitToWord } from "../types/Selection";
-import { Clause } from "../types/Clause";
-import { clausesToCuts } from "../types/Cuts";
-import { Jumbotron } from 'react-bootstrap';
-
+import { Clause, PartOfSpeech } from "../types/Clause";
+import { clausesToCuts, selectionToCuts, cutComparator } from "../types/Cuts";
+import { Maybe, Nothing } from "../util/Maybe";
 
 type props = {
   text: string;
-  clauses: Map<string, Clause>;
-  onSelection: (selection?: Selection) => void;
+  clauses: Clause[];
+  onSelection: (selection: Maybe<Selection>) => void;
+  selecting: Maybe<Selection>;
+  addSelection: (pos: PartOfSpeech) => void;
 };
 
 function makeSelection(text: string): null | Selection {
@@ -22,9 +25,12 @@ function makeSelection(text: string): null | Selection {
       range.startContainer?.parentElement?.id?.includes("start") &&
       range.endContainer?.parentElement?.id?.includes("start")
     ) {
-
-      const begin = parseInt(range.startContainer.parentElement.id.split("-")[1]) + range.startOffset;
-      const end = parseInt(range.endContainer.parentElement.id.split("-")[1]) + range.endOffset;
+      const begin =
+        parseInt(range.startContainer.parentElement.id.split("-")[1], 10) +
+        range.startOffset;
+      const end =
+        parseInt(range.endContainer.parentElement.id.split("-")[1], 10) +
+        range.endOffset;
 
       const editedRange: [number, number] | null = fitToWord(text, begin, end);
 
@@ -34,8 +40,7 @@ function makeSelection(text: string): null | Selection {
 
       const selection: Selection = {
         begin: editedRange[0],
-        end: editedRange[1]
-
+        end: editedRange[1],
       };
       return selection;
     }
@@ -45,21 +50,70 @@ function makeSelection(text: string): null | Selection {
   return null;
 }
 
-const MarkUp: FunctionComponent<props> = ({ text, clauses, onSelection }) => {
+const MarkUp: FunctionComponent<props> = ({
+  text,
+  clauses,
+  onSelection,
+  selecting,
+  addSelection,
+}: props) => {
+  const [menuPosition, setMenuPosition] = useState({
+    x: 0,
+    y: 0,
+  } as MenuPosition);
 
-  // console.log("Rerendering markup.");
-  let checkSelection = () => {
-    let selection = makeSelection(text);
+  const menuRef = useRef<HTMLUListElement>(null);
+  const pRef = useRef<HTMLParagraphElement>(null);
+
+  // TODO: Move this part to a separate function?
+  useEffect(() => {
+    /**
+     * Alert if clicked on outside of element
+     */
+    const handleClickOutside: { (event: globalThis.MouseEvent): void } = (
+      event: globalThis.MouseEvent
+    ) => {
+      if (
+        pRef.current &&
+        menuRef.current &&
+        !pRef.current.contains(event.target as Node) &&
+        !menuRef.current.contains(event.target as Node)
+      ) {
+        onSelection(Nothing);
+      }
+    };
+
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [pRef, menuRef, onSelection]);
+
+  const checkSelection = (event: React.MouseEvent) => {
+    const selection = makeSelection(text);
     if (selection !== null) {
-      onSelection(selection)
+      setMenuPosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+      onSelection(selection);
     }
-
   };
 
-  //TODO: implement clausesToSelectionsFunction
-  let cuts = clausesToCuts(clauses);
-  // console.log("Cuts from markup:", cuts);
-  let displaySelections: any = [];
+  // TODO: implement clausesToSelectionsFunction
+  const cuts = clausesToCuts(clauses);
+
+  if (selecting !== Nothing) {
+    cuts.push(...selectionToCuts(selecting, "black", "yellow"));
+  }
+
+  cuts.sort(cutComparator);
+
+  console.log("Cuts from markup:", cuts);
+  const displaySelections: any = [];
 
   let firstSpanEnd = text.length;
   let lastSpanStart = text.length;
@@ -70,38 +124,25 @@ const MarkUp: FunctionComponent<props> = ({ text, clauses, onSelection }) => {
   }
 
   displaySelections.push(
-    <span
-      key="start"
-      id="start-0">
+    <span key="start" id="start-0">
       {text.slice(0, firstSpanEnd)}
     </span>
   );
-  let activeIds: string[] = [];
 
-  for (let i = 0; i <= cuts.length - 2; i++) {
+  for (let i = 0; i <= cuts.length - 2; i += 1) {
     let style;
     if (cuts[i].type === "start") {
-      activeIds.push(cuts[i].id);
-      style = { backgroundColor: cuts[i].color }
-    }
-    if (cuts[i].type === "end") {
-      activeIds.splice(activeIds.indexOf(cuts[i].id), 1);
-    }
-
-
-
-    let classes = activeIds.join(" ");
-
-    if (activeIds.length > 0) {
-      classes += ", selection";
+      style = {
+        backgroundColor: cuts[i].backgroundColor,
+        color: cuts[i].textColor,
+      };
     }
 
     displaySelections.push(
       <span
-        key={cuts[i].id + cuts[i].type + cuts[i].color + i}
-        className={classes}
-        id={"start-" + cuts[i].index}
-        //Figure out how to handle color of overlapping selections.
+        key={cuts[i].type + i}
+        id={`start-${cuts[i].index}`}
+        // Figure out how to handle color of overlapping selections.
         style={style}
       >
         {text.slice(cuts[i].index, cuts[i + 1].index)}
@@ -118,9 +159,21 @@ const MarkUp: FunctionComponent<props> = ({ text, clauses, onSelection }) => {
   return (
     <>
       <Jumbotron>
-        <p onMouseUp={checkSelection} id="text-root" className="markup-text">
+        <p
+          onMouseUp={checkSelection}
+          id="text-root"
+          className="markup-text"
+          ref={pRef}
+        >
           {displaySelections}
         </p>
+        {selecting !== Nothing && (
+          <Menu
+            position={menuPosition}
+            addSelection={addSelection}
+            ref={menuRef}
+          />
+        )}
       </Jumbotron>
     </>
   );
