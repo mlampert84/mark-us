@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { Clause, getDisplayName } from "../types/Clause";
+import { Clause, getDisplayName, PartOfSpeech } from "../types/Clause";
 import { Nothing } from "../util/Maybe";
 import { OrderedClause, toOrderedClause } from "../types/OrderedClause";
 import SVGText from "./SVGText";
@@ -8,6 +8,7 @@ type Props = {
   index: number;
   clause: Clause;
   text: string;
+  onDelete: (index: number) => (part: PartOfSpeech) => void;
 };
 
 const selectionsStartY = 70;
@@ -114,7 +115,10 @@ function mapClauseToTree(clause: OrderedClause): JSX.Element[][] {
   return svgElements;
 }
 
-function mapClauseToTextDivs(clause: OrderedClause) {
+function mapClauseToTextDivs(
+  clause: OrderedClause,
+  onDelete: (p: PartOfSpeech) => void
+) {
   const textFields: React.ReactElement[] = [];
 
   clause.forEach((el, index) => {
@@ -123,11 +127,12 @@ function mapClauseToTextDivs(clause: OrderedClause) {
         <SVGText
           key={el.partOfSpeech}
           width={elementWidth}
-          height={20}
+          height={80}
           x={textStartX(index)}
           y={selectionsStartY}
           text={el.text}
           pos={el.partOfSpeech}
+          onDelete={onDelete}
         />
       );
     }
@@ -140,6 +145,7 @@ const ClauseSvg: FunctionComponent<Props> = ({
   index,
   clause,
   text,
+  onDelete,
 }: Props) => {
   const orderedClause: OrderedClause = toOrderedClause(clause, text);
 
@@ -147,7 +153,7 @@ const ClauseSvg: FunctionComponent<Props> = ({
     <div className="svg-wrapper" key={`${index}`}>
       <svg className="svg">
         {mapClauseToTree(orderedClause)}
-        {mapClauseToTextDivs(orderedClause)}
+        {mapClauseToTextDivs(orderedClause, onDelete(index))}
       </svg>
     </div>
   );

@@ -8,6 +8,7 @@ export type SVGTextProps = {
   height: number;
   text: string;
   pos: PartOfSpeech;
+  onDelete: (p: PartOfSpeech) => void;
 };
 
 const SVGText: FunctionComponent<SVGTextProps> = ({
@@ -17,8 +18,9 @@ const SVGText: FunctionComponent<SVGTextProps> = ({
   height,
   text,
   pos,
+  onDelete,
 }: SVGTextProps) => {
-  const divStyle = {
+  const divColor = {
     backgroundColor: partOfSpeechToColor(pos),
   };
 
@@ -27,9 +29,19 @@ const SVGText: FunctionComponent<SVGTextProps> = ({
       x={`${x}%`}
       y={`${y}%`}
       width={`${width}%`}
-      height={`${height}%`}
+      height={`${height}px`}
     >
-      <div style={divStyle} className="svgText">
+      <div style={divColor} className="svgTextTopHack">
+        <span
+          className="closeButton"
+          onClick={() => {
+            onDelete(pos);
+          }}
+        >
+          &times;
+        </span>
+      </div>
+      <div style={divColor} className="svgText">
         {text}
       </div>
     </foreignObject>

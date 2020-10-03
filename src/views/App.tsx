@@ -10,6 +10,7 @@ import {
   addNewClause,
   Clause,
   addSelectionToClause,
+  deleteSelectionFromClause,
 } from "../types/Clause";
 import { Maybe, Nothing } from "../util/Maybe";
 import ClauseSvg from "./ClauseSvg";
@@ -32,19 +33,11 @@ const App: FunctionComponent = () => {
 
   const onAddClause = () => setClauses(addNewClause(clauses));
 
-  // TODO
-  // const startingSelecting: Selecting = {
-  //   clauseId: getFirstId(clauses),
-  //   part: "subject"
-  // };
-
-  // TODO
-  // const onSelectionDelete = (id: string, part: ClausePart) => {
-  //   setClauses(deleteClausePart(id, part, clauses));
-  // }
+  const onSelectionDelete = (index: number) => (part: PartOfSpeech) => {
+    setClauses(deleteSelectionFromClause(clauses, index, part));
+  };
 
   const onSelection = (selection: Maybe<Selection>) => {
-    console.log("Here is the selection: ", selection);
     setSelecting(selection);
   };
 
@@ -55,7 +48,13 @@ const App: FunctionComponent = () => {
 
   const svgs = clauses.map((c, index) => {
     return (
-      <ClauseSvg key={index.toString()} index={index} clause={c} text={text} />
+      <ClauseSvg
+        key={index.toString()}
+        index={index}
+        clause={c}
+        text={text}
+        onDelete={onSelectionDelete}
+      />
     );
   });
 
@@ -63,7 +62,6 @@ const App: FunctionComponent = () => {
     <div className="flexbox">
       <div className="flex-item padding">
         <Help show={helpModal} close={closeModal} />
-        {/* <Container > */}
         <Row>
           <Col>
             <h2 className="title">Satzanalysator</h2>
@@ -82,7 +80,6 @@ const App: FunctionComponent = () => {
           selecting={selecting}
           addSelection={addSelection}
         />
-        {/* </Container> */}
       </div>
       <div className="flex-item clause-col">
         {svgs}

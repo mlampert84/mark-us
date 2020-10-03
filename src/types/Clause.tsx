@@ -38,6 +38,22 @@ export function addSelectionToClause(
   return copy;
 }
 
+export function deleteSelectionFromClause(
+  clauses: Clause[],
+  clauseIndex: number,
+  partOfSpeech: PartOfSpeech
+): Clause[] {
+  const copy = clauses.slice();
+  const index = copy[clauseIndex].findIndex(
+    (p) => p.partOfSpeech === partOfSpeech
+  );
+  if (index > -1) {
+    copy[clauseIndex].splice(index, 1);
+  }
+
+  return copy;
+}
+
 export function addNewClause(clauses: Clause[]): Clause[] {
   const copy = clauses.slice();
   copy.push([]);
