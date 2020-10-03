@@ -112,7 +112,6 @@ const MarkUp: FunctionComponent<props> = ({
 
   cuts.sort(cutComparator);
 
-  console.log("Cuts from markup:", cuts);
   const displaySelections: any = [];
 
   let firstSpanEnd = text.length;

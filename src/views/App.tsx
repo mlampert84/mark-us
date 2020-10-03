@@ -31,9 +31,30 @@ const App: FunctionComponent = () => {
     setClauses([[]]);
   };
 
-  const onAddClause = () => setClauses(addNewClause(clauses));
+  const onAddClause = () => {
+    const newClauses = addNewClause(clauses);
+    setClauses(newClauses);
+    setActiveClause(newClauses.length - 1);
+  };
 
-  const onSelectionDelete = (index: number) => (part: PartOfSpeech) => {
+  const onDeleteClause = (index: number) => {
+    if (clauses.length > 1) {
+      const copy = clauses.slice();
+      copy.splice(index, 1);
+      setClauses(copy);
+
+      if (index > 0) {
+        setActiveClause(index - 1);
+      } else {
+        setActiveClause(0);
+      }
+    } else {
+      setClauses([[]]);
+      setActiveClause(0);
+    }
+  };
+
+  const onDeleteSelection = (index: number) => (part: PartOfSpeech) => {
     setClauses(deleteSelectionFromClause(clauses, index, part));
   };
 
@@ -53,7 +74,10 @@ const App: FunctionComponent = () => {
         index={index}
         clause={c}
         text={text}
-        onDelete={onSelectionDelete}
+        active={index === activeClause}
+        onSelectClause={setActiveClause}
+        onDeleteClause={onDeleteClause}
+        onDeleteSelection={onDeleteSelection}
       />
     );
   });
@@ -85,7 +109,6 @@ const App: FunctionComponent = () => {
         {svgs}
 
         <Button onClick={onAddClause}>New Clause</Button>
-        {/* <div>{JSON.stringify(clauses)}</div> */}
       </div>
     </div>
   );

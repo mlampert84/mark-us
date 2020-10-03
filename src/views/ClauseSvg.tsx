@@ -8,7 +8,10 @@ type Props = {
   index: number;
   clause: Clause;
   text: string;
-  onDelete: (index: number) => (part: PartOfSpeech) => void;
+  active: boolean;
+  onSelectClause: (index: number) => void;
+  onDeleteClause: (index: number) => void;
+  onDeleteSelection: (index: number) => (part: PartOfSpeech) => void;
 };
 
 const selectionsStartY = 70;
@@ -145,15 +148,32 @@ const ClauseSvg: FunctionComponent<Props> = ({
   index,
   clause,
   text,
-  onDelete,
+  active,
+  onSelectClause,
+  onDeleteClause,
+  onDeleteSelection,
 }: Props) => {
   const orderedClause: OrderedClause = toOrderedClause(clause, text);
 
+  const activeStyling = active ? "svgActive" : "svgNotActive";
+
   return (
-    <div className="svg-wrapper" key={`${index}`}>
-      <svg className="svg">
+    <div className="svgWrapper">
+      <span
+        className="closeButton"
+        onClick={() => {
+          onDeleteClause(index);
+        }}
+      >
+        &times;
+      </span>
+      <svg
+        className={`svg ${activeStyling}`}
+        key={index}
+        onClick={() => onSelectClause(index)}
+      >
         {mapClauseToTree(orderedClause)}
-        {mapClauseToTextDivs(orderedClause, onDelete(index))}
+        {mapClauseToTextDivs(orderedClause, onDeleteSelection(index))}
       </svg>
     </div>
   );
