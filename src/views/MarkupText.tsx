@@ -103,7 +103,8 @@ const MarkUp: FunctionComponent<props> = ({
     }
   };
 
-  // TODO: implement clausesToSelectionsFunction
+  // TODO: check if yellow highlight overlaps anything existing, and if yes, 
+  // remove just here that which the highlight overlaps
   const cuts = clausesToCuts(clauses);
 
   if (selecting !== Nothing) {
@@ -128,7 +129,7 @@ const MarkUp: FunctionComponent<props> = ({
     </span>
   );
 
-  for (let i = 0; i <= cuts.length - 2; i += 1) {
+  for (let i = 0; i <= cuts.length - 2; i += 1) {   
     let style;
     if (cuts[i].type === "start") {
       style = {
